@@ -1,3 +1,6 @@
+using authorizationMicroservice.Data;
+using authorizationMicroservice.Helpers;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace authorizationMicroservice
@@ -32,6 +36,9 @@ namespace authorizationMicroservice
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "authorizationMicroservice", Version = "v1" });
             });
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
+            services.AddScoped<IFakeUserRepository, FakeUserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
