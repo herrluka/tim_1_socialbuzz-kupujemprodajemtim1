@@ -1,8 +1,10 @@
 using authorizationMicroservice.Data;
 using authorizationMicroservice.Helpers;
 using AutoMapper;
+using LoggingClassLibrary;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -23,8 +25,10 @@ namespace authorizationMicroservice
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Logger.Configuration = configuration;
+            Logger.GetInstance();
+            
         }
-
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -50,13 +54,24 @@ namespace authorizationMicroservice
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "authorizationMicroservice v1"));
             }
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Headers.TryGetValue("CommunicationKey", out var key) && key == Configuration["CommunicationKey:Key"])
+                {
+                    await next.Invoke();
 
+                }
+                else
+                {
+                    context.Response.StatusCode = 401;
+                    Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {context.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid communication token, access denied!");
+                }
+            });
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

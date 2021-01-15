@@ -1,3 +1,4 @@
+using LoggingClassLibrary;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +22,8 @@ namespace authorizationMicroservice
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureLogging((logging)=> {
+                    logging.AddProvider(new LoggerProvider());
                 });
     }
 }

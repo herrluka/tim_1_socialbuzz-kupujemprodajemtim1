@@ -22,10 +22,10 @@ namespace authorizationMicroservice.Helpers
         public AuthorizationHelper(IMapper mapper,IConfiguration configuration,IFakeUserRepository userRepository)
         {
             Client = new HttpClient() ;
-            Client.DefaultRequestHeaders.Add("ValidationToken", "Ovo je token");
             Mapper = mapper;
             Configuration = configuration;
             UserRepository = userRepository;
+            Client.DefaultRequestHeaders.Add("CommunicationKey", Configuration["CommunicationKey:Key"]);
         }
 
         public HttpClient Client { get; }
@@ -50,10 +50,10 @@ namespace authorizationMicroservice.Helpers
         public async Task<User> GetUser(Principal principal,string type)
         {
             /*Kod za pozivanje user mikroservisa
-             * 
-             * try
+              
+              try
             {
-                 HttpResponseMessage response = await Client.GetAsync($"{Configuration["ServicesUrl:User"]}/{type}/?username={principal.Username}");
+                 HttpResponseMessage response = await Client.GetAsync($"{Configuration["ServicesUrl:User"]}/?type={type}&username={principal.Username}");
                 switch (response.StatusCode)
                 {
                     case System.Net.HttpStatusCode.OK:

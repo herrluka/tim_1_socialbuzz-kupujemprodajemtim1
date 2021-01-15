@@ -1,7 +1,9 @@
 ﻿using authorizationMicroservice.Entities;
 using authorizationMicroservice.Helpers;
 using authorizationMicroservice.Models;
+using LoggingClassLibrary;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +27,10 @@ namespace authorizationMicroservice.Controllers
            if(AuthorizationHelper.ValidatePrincipal(principal,"user"))
             {
                 var tokenString = AuthorizationHelper.GenerateJWT(principal,"user");
+                Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: User {principal.Username} succesfully logged in");
                 return Ok(new { token = tokenString });
             }
+            Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid credentials from client");
             return Unauthorized();
         }
         [HttpPost("admin")]
@@ -35,8 +39,10 @@ namespace authorizationMicroservice.Controllers
             if (AuthorizationHelper.ValidatePrincipal(principal,"admin"))
             {
                 var tokenString = AuthorizationHelper.GenerateJWT(principal,"admin");
+                Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Admin {principal.Username} succesfully logged in");
                 return Ok(new { token = tokenString });
-            }
+                 }
+            Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid credentials from client");
             return Unauthorized();
         }
     }
