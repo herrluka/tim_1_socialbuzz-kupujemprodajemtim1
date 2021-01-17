@@ -37,3 +37,12 @@ C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\obj\Debug\
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\obj\Debug\net5.0\loggerMicroservice.genruntimeconfig.cache
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\LoggingClassLibrary.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\CommunicationKeyAuthClassLibrary.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\DnsClient.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\MongoDB.Bson.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\MongoDB.Driver.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\MongoDB.Driver.Core.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\MongoDB.Libmongocrypt.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\SharpCompress.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\runtimes\win\native\libzstd.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\runtimes\win\native\snappy32.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\runtimes\win\native\snappy64.dll

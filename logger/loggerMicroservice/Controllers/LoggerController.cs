@@ -1,4 +1,5 @@
-﻿using loggerMicroservice.Models;
+﻿using loggerMicroservice.Data;
+using loggerMicroservice.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,32 @@ namespace loggerMicroservice.Controllers
     [Route("api/log")]
     public class LoggerController:ControllerBase
     {
+        public ILogRepository LogRepository { get; }
+
+        public LoggerController(ILogRepository logRepository)
+        {
+            LogRepository = logRepository;
+        }
         [HttpPost]
         public IActionResult Log([FromForm]Log log)
         {
-            Console.WriteLine(log);
-            return Ok();
+                Log insertedLog = LogRepository.InsertLog(log);
+                return Ok(insertedLog);
+        }
+        [HttpGet("{microservice}")]
+        public ActionResult<List<Log>> GetLogsByService(string microservice)
+        {
+            return Ok(LogRepository.GetLogsByMicroservice(microservice));
+        }
+        [HttpGet("/interval")]
+        public ActionResult<List<Log>> GetLogsByInterval(DateTime from ,DateTime to)
+        {
+            return Ok(LogRepository.GetLogsByInterval(from, to));
+        }
+        [HttpGet("/level/{logLevel}")]
+        public ActionResult<List<Log>> GetLogsByLevel(string logLevel)
+        {
+            return Ok(LogRepository.GetLogsByLogLevel(logLevel));
         }
     }
 }
