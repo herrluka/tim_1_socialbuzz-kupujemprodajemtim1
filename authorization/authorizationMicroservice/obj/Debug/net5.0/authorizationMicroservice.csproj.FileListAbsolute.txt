@@ -37,4 +37,5 @@ C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroserv
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\obj\Debug\net5.0\authorizationMicroservice.genruntimeconfig.cache
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\AutoMapper.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\CommunicationKeyAuthClassLibrary.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\LoggingClassLibrary.dll

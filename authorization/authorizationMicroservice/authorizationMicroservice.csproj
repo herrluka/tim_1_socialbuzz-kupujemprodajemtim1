@@ -12,6 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="CommunicationKeyAuthClassLibrary">
+      <HintPath>..\..\CommunicationKeyAuthClassLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="LoggingClassLibrary">
       <HintPath>..\..\LoggingClassLibrary.dll</HintPath>
     </Reference>

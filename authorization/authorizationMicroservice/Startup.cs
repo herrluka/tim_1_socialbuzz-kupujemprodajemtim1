@@ -1,6 +1,7 @@
 using authorizationMicroservice.Data;
 using authorizationMicroservice.Helpers;
 using AutoMapper;
+using CommunicationKeyAuthClassLibrary;
 using LoggingClassLibrary;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,10 +25,7 @@ namespace authorizationMicroservice
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-            Logger.Configuration = configuration;
-            Logger.GetInstance();
-            
+            Configuration = configuration;        
         }
         public IConfiguration Configuration { get; }
 
@@ -43,30 +41,23 @@ namespace authorizationMicroservice
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
             services.AddScoped<IFakeUserRepository, FakeUserRepository>();
+            services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<ILoggerProvider, LoggerProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory,ILoggerProvider loggerProvider, ILogger logger)
         {
+            loggerFactory.AddProvider(loggerProvider);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "authorizationMicroservice v1"));
             }
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Headers.TryGetValue("CommunicationKey", out var key) && key == Configuration["CommunicationKey:Key"])
-                {
-                    await next.Invoke();
 
-                }
-                else
-                {
-                    context.Response.StatusCode = 401;
-                    Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {context.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid communication token, access denied!");
-                }
-            });
+            app.UseMiddleware<CommunicationKeyAuthMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();

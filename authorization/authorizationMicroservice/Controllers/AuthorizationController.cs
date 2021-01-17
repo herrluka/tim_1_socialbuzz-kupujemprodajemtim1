@@ -1,7 +1,6 @@
 ﻿using authorizationMicroservice.Entities;
 using authorizationMicroservice.Helpers;
 using authorizationMicroservice.Models;
-using LoggingClassLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,10 +15,12 @@ namespace authorizationMicroservice.Controllers
     public class AuthorizationController:ControllerBase
     {
         private readonly IAuthorizationHelper AuthorizationHelper;
+        private readonly ILogger logger;
 
-        public AuthorizationController(IAuthorizationHelper authorizationHelper)
+        public AuthorizationController(IAuthorizationHelper authorizationHelper, ILogger logger)
         {
             AuthorizationHelper = authorizationHelper;
+            this.logger = logger;
         }
         [HttpPost("user")]
         public IActionResult AuthorizeUser(Principal principal)
@@ -27,10 +28,10 @@ namespace authorizationMicroservice.Controllers
            if(AuthorizationHelper.ValidatePrincipal(principal,"user"))
             {
                 var tokenString = AuthorizationHelper.GenerateJWT(principal,"user");
-                Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: User {principal.Username} succesfully logged in");
+                logger.Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: User {principal.Username} succesfully logged in");
                 return Ok(new { token = tokenString });
             }
-            Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid credentials from client");
+            logger.Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid credentials from client");
             return Unauthorized();
         }
         [HttpPost("admin")]
@@ -39,10 +40,10 @@ namespace authorizationMicroservice.Controllers
             if (AuthorizationHelper.ValidatePrincipal(principal,"admin"))
             {
                 var tokenString = AuthorizationHelper.GenerateJWT(principal,"admin");
-                Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Admin {principal.Username} succesfully logged in");
+                logger.Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Admin {principal.Username} succesfully logged in");
                 return Ok(new { token = tokenString });
                  }
-            Logger.GetInstance().Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid credentials from client");
+            logger.Log(LogLevel.Warning, $"RequestID: {Request.HttpContext.TraceIdentifier}, previousRequestID:No previous ID, Message: Invalid credentials from client");
             return Unauthorized();
         }
     }

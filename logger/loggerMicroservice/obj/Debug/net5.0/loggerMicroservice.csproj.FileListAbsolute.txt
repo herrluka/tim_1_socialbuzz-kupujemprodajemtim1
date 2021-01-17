@@ -36,3 +36,4 @@ C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\obj\Debug\
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\obj\Debug\net5.0\loggerMicroservice.pdb
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\obj\Debug\net5.0\loggerMicroservice.genruntimeconfig.cache
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\LoggingClassLibrary.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\CommunicationKeyAuthClassLibrary.dll
