@@ -19,25 +19,19 @@ namespace loggerMicroservice.Controllers
             LogRepository = logRepository;
         }
         [HttpPost]
-        public IActionResult Log([FromForm]Log log)
+        public IActionResult InsertLog([FromForm]Log log)
         {
                 Log insertedLog = LogRepository.InsertLog(log);
                 return Ok(insertedLog);
         }
-        [HttpGet("{microservice}")]
-        public ActionResult<List<Log>> GetLogsByService(string microservice)
+        [HttpGet]
+        public ActionResult<List<Log>> GetLogs(string microservice,string logLevel,DateTime from,DateTime to)
         {
-            return Ok(LogRepository.GetLogsByMicroservice(microservice));
-        }
-        [HttpGet("/interval")]
-        public ActionResult<List<Log>> GetLogsByInterval(DateTime from ,DateTime to)
-        {
-            return Ok(LogRepository.GetLogsByInterval(from, to));
-        }
-        [HttpGet("/level/{logLevel}")]
-        public ActionResult<List<Log>> GetLogsByLevel(string logLevel)
-        {
-            return Ok(LogRepository.GetLogsByLogLevel(logLevel));
+
+           var collection= LogRepository.GetLogs(microservice, logLevel, from, to);
+            Console.WriteLine(collection);
+            return Ok(collection);
+            
         }
     }
 }
