@@ -46,3 +46,4 @@ C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\runtimes\win\native\libzstd.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\runtimes\win\native\snappy32.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\runtimes\win\native\snappy64.dll
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\logger\loggerMicroservice\bin\Debug\net5.0\loggerMicroservice.xml

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace authorizationMicroservice.Entities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class User
     {
         public Guid ID { get; set; }

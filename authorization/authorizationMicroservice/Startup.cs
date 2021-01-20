@@ -1,4 +1,4 @@
-using authorizationMicroservice.Data;
+﻿using authorizationMicroservice.Data;
 using authorizationMicroservice.Helpers;
 using AutoMapper;
 using CommunicationKeyAuthClassLibrary;
@@ -15,8 +15,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace authorizationMicroservice
@@ -36,7 +38,21 @@ namespace authorizationMicroservice
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "authorizationMicroservice", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Authorization Microservice",
+                    Version = "1",
+                    Description = "Mikroservis koji služi za autorizaciju korisnika i admin i putem kojeg se dobijaju tokeni za autentifikaciju.",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    {
+                        Name = "Marko Puzović",
+                        Email = "markopuzovi98@gmail.com",
+                        Url = new Uri("http://markopuzovic.website/")
+                    }
+                });
+                var xmlComments = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsPath = Path.Combine(AppContext.BaseDirectory, xmlComments);
+                c.IncludeXmlComments(xmlCommentsPath);
             });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IAuthorizationHelper, AuthorizationHelper>();
@@ -53,7 +69,7 @@ namespace authorizationMicroservice
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "authorizationMicroservice v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authorization Microservice"));
             }
 
             app.UseMiddleware<CommunicationKeyAuthMiddleware>();

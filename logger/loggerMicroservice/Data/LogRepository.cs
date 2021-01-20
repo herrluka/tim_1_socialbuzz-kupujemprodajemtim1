@@ -20,14 +20,28 @@ namespace loggerMicroservice.Data
 
         public IConfiguration Configuration { get; }
 
-       
+       /// <summary>
+       /// Unos novog reda u tabelu Log u bazi
+       /// </summary>
+       /// <param name="record">log koji se unosi</param>
+       /// <returns></returns>
         public Log InsertLog(Log record)
         {
             var collection = database.GetCollection<Log>("Log");
             collection.InsertOne(record);
-            return collection.Find(Builders<Log>.Filter.Eq("ID", record.ID)).First();
+            var returnCollection= collection.Find(Builders<Log>.Filter.Eq("ID", new Guid())).ToList();
+            if (returnCollection.Count == 0)
+                return null;
+            return collection.Find(Builders<Log>.Filter.Eq("ID", new Guid())).First();
         }
-
+        /// <summary>
+        /// Metoda koja vraca sve logove iz baze po zadatim parametrima
+        /// </summary>
+        /// <param name="microserviceName">Naziv mikroservisa</param>
+        /// <param name="logLevel">Nivo logovanja</param>
+        /// <param name="from">Datum i vreme koji oznacavaju pocetak intervala za koji se vracaju logovi</param>
+        /// <param name="to">Datum i vreme koji oznacavaju kraj intervala za koji se vracaju logovi</param>
+        /// <returns></returns>
         public IList<Log> GetLogs(string microserviceName, string logLevel, DateTime from, DateTime to)
         {
             logLevel = (logLevel != null ?logLevel: "");
@@ -37,8 +51,6 @@ namespace loggerMicroservice.Data
                 to = DateTime.Now;
             }
             var collection = database.GetCollection<Log>("Log").Find(new BsonDocument()).ToList();
-            string s = "sdsd";
-            Console.WriteLine($"{s.Contains(logLevel)}");
             return collection.FindAll((element) => (DateTime.Parse(element.TimeOfAction) > from && DateTime.Parse(element.TimeOfAction) < to && element.Microservice.Contains(microserviceName) && element.LogLevel.Contains(logLevel)));
         }
     }
