@@ -1,4 +1,5 @@
-﻿using loggerMicroservice.Data;
+﻿using AutoMapper;
+using loggerMicroservice.Data;
 using loggerMicroservice.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,12 @@ namespace loggerMicroservice.Controllers
     public class LoggerController:ControllerBase
     {
         public ILogRepository LogRepository { get; }
+        public IMapper Mapper { get; }
 
-        public LoggerController(ILogRepository logRepository)
+        public LoggerController(ILogRepository logRepository, IMapper mapper)
         {
             LogRepository = logRepository;
+            Mapper = mapper;
         }
 
         /// <summary>
@@ -50,14 +53,14 @@ namespace loggerMicroservice.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public IActionResult InsertLog([FromForm]Log log)
+        public ActionResult<LogDto> InsertLog([FromForm]Log log)
         {
             try
             {
                 Log insertedLog = LogRepository.InsertLog(log);
                 if (insertedLog == null)
                     throw new Exception("Something went wrong while inserting in the database!");
-                return Created("", insertedLog);
+                return Created("", Mapper.Map<LogDto>(insertedLog));
             }
             catch (Exception ex)
             {

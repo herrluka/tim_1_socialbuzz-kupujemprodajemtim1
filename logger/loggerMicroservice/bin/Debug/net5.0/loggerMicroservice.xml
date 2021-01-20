@@ -124,5 +124,35 @@
             Interni identifikator loga
             </summary>
         </member>
+        <member name="T:loggerMicroservice.Models.LogDto">
+            <summary>
+            Dto za logove
+            </summary>
+        </member>
+        <member name="M:loggerMicroservice.Models.LogDto.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Dto za logove
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.ID">
+            <summary>
+            Jedinstveni identifikator loga
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.LogLevel">
+            <summary>
+            Nivo logovanja
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.Message">
+            <summary>
+            Poruka za logovanje
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.Microservice">
+            <summary>
+            Naziv mikroservisa
+            </summary>
+        </member>
     </members>
 </doc>

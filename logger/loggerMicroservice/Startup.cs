@@ -1,4 +1,5 @@
-﻿using CommunicationKeyAuthClassLibrary;
+﻿using AutoMapper;
+using CommunicationKeyAuthClassLibrary;
 using loggerMicroservice.Data;
 using LoggingClassLibrary;
 using Microsoft.AspNetCore.Builder;
@@ -49,6 +50,7 @@ namespace loggerMicroservice
                 var xmlCommentsPath = Path.Combine(AppContext.BaseDirectory, xmlComments);
                 c.IncludeXmlComments(xmlCommentsPath);
             });
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSingleton<ILogger, Logger>();
             services.AddScoped<ILogRepository, LogRepository>();
         }
