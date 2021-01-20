@@ -31,7 +31,7 @@ namespace Recommendation_Service.Controllers
         [HttpGet("recommended-products")]
         public async Task<IActionResult> GetRecommededProducts([FromHeader] string token, [FromQuery] int productCategoryId, [FromQuery] double productPrice)
         {
-            applicationDbContext.Category.ToList();
+            
             if (token is null)
             {
                 return new UnauthorizedObjectResult(new { status = "Token not provided", content = (string)null });
@@ -53,7 +53,7 @@ namespace Recommendation_Service.Controllers
 
             var products = await productService.GetProductByCategoryRankAndCeilingPrice((int)recommendedRank, recommendedPrice);
 
-            return new UnauthorizedObjectResult(new { status = "OK", content = products});
+            return new OkObjectResult(new { status = "OK", content = products});
             
         }
     }

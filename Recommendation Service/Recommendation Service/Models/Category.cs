@@ -7,8 +7,17 @@ namespace Recommendation_Service.Models
 {
     public class Category
     {
+        /// <summary>
+        /// Primary key
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Category name
+        /// </summary>
         public string CategoryName{ get; set; }
+        /// <summary>
+        /// Category rank calculated based on average price
+        /// </summary>
         public int  CategoryRank { get; set; }
     }
 }
