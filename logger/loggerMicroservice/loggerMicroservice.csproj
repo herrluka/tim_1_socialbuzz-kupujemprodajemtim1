@@ -24,4 +24,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Postman\loggerMicroservice.csproj.user" />
+  </ItemGroup>
+
 </Project>
