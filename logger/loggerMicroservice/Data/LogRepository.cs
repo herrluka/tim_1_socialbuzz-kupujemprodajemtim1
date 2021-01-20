@@ -29,10 +29,10 @@ namespace loggerMicroservice.Data
         {
             var collection = database.GetCollection<Log>("Log");
             collection.InsertOne(record);
-            var returnCollection= collection.Find(Builders<Log>.Filter.Eq("ID", new Guid())).ToList();
+            var returnCollection= collection.Find(Builders<Log>.Filter.Eq("ID", record.ID)).ToList();
             if (returnCollection.Count == 0)
                 return null;
-            return collection.Find(Builders<Log>.Filter.Eq("ID", new Guid())).First();
+            return returnCollection.First();
         }
         /// <summary>
         /// Metoda koja vraca sve logove iz baze po zadatim parametrima
