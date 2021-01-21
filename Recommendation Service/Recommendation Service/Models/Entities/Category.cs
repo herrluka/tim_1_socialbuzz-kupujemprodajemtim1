@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Recommendation_Service.Models
 {
+    /// <summary>
+    /// Model that represent database class Category
+    /// </summary>
     public class Category
     {
         /// <summary>

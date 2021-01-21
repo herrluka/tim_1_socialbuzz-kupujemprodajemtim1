@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Recommendation_Service.Data;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +14,12 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using CommunicationKeyAuthClassLibrary;
 using LoggingClassLibrary;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Recommendation_Service.Models;
+using Recommendation_Service.Data.Fakes;
+using Microsoft.Extensions.Logging;
 
 namespace Recommendation_Service
 {
@@ -47,13 +52,31 @@ namespace Recommendation_Service
 
     }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExceptionHandler(appError =>
+            {
+                appError.Run(async context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (contextFeature != null)
+                    {
+                        //TODO: add Logger
+                        await context.Response.WriteAsync(new ErrorDetails
+                        {
+                            StatusCode = context.Response.StatusCode,
+                            Message = "Internal Server Error."
+                        }.ToString());
+                    }
+                });
+            });
 
             app.UseHttpsRedirection();
 

@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace Recommendation_Service.Models
 {
+    /// <summary>
+    /// Data transfer object used for communication
+    /// with Product service
+    /// </summary>
     public class ProductDto
     {
         public int Id { get; set; }
