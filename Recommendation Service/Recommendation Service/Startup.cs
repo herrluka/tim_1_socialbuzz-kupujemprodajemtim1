@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using CommunicationKeyAuthClassLibrary;
+using LoggingClassLibrary;
 
 namespace Recommendation_Service
 {
@@ -33,11 +35,13 @@ namespace Recommendation_Service
                 s.SwaggerDoc("v1", new OpenApiInfo { Title = "Recommendation service API", Version = "v1" });
             });
             services.AddScoped<IProductService, FakeProductService>();
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ConnectionStr"));
-            builder.UserID = Environment.GetEnvironmentVariable("DB_USERNAME");
-            builder.Password = Environment.GetEnvironmentVariable("DB_PASSWORD");
-            builder.Authentication = SqlAuthenticationMethod.SqlPassword;
-            Console.WriteLine(builder.ConnectionString);
+            services.AddSingleton<ILogger, Logger>();
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ConnectionStr"))
+            {
+                UserID = Environment.GetEnvironmentVariable("DB_USERNAME"),
+                Password = Environment.GetEnvironmentVariable("DB_PASSWORD"),
+                Authentication = SqlAuthenticationMethod.SqlPassword
+            };
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
 
@@ -51,12 +55,16 @@ namespace Recommendation_Service
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+
             app.UseSwagger();
 
             app.UseSwaggerUI(s =>
             {
                 s.SwaggerEndpoint("v1/swagger.json", "Recommendation service API");
             });
+
+            app.UseMiddleware<CommunicationKeyAuthMiddleware>();
 
             app.UseRouting();
 

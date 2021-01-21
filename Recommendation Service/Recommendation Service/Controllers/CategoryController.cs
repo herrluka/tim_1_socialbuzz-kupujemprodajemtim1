@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Recommendation_Service.Data;
 using Recommendation_Service.Models;
 using System;
@@ -12,7 +13,7 @@ namespace Recommendation_Service.Controllers
     /// Controler used to take care of synchornizing Category table
     /// </summary>
     [ApiController]
-    [Route("category")]
+    [Route("api")]
     public class CategoryController
     {
         private readonly ApplicationDbContext applicationDbContext;
@@ -22,21 +23,12 @@ namespace Recommendation_Service.Controllers
             this.applicationDbContext = applicationDbContext;
         }
 
-
-        [HttpPost()]
-        public IActionResult CreateNewCategory([FromHeader] string token, [FromBody] CategoryDto category)
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [HttpPost("category")]
+        public IActionResult CreateNewCategory([FromBody] CategoryDto category)
         {
-            if (token is null)
-            {
-                return new UnauthorizedObjectResult(new { status = "Token not provided", content = (string)null });
-            }
-
-            var secretToken = Environment.GetEnvironmentVariable("API_SECRET_KEY");
-            if (token != secretToken)
-            {
-                return new UnauthorizedObjectResult(new { status = "Bad token sent", content = (string)null });
-            }
-
+            
             var newCategory = new Category()
             {
                 Id = category.Id,
@@ -44,7 +36,7 @@ namespace Recommendation_Service.Controllers
                 CategoryRank = category.Rank
             };
 
-            applicationDbContext.Category.Attach(newCategory);
+            applicationDbContext.Category.Add(newCategory);
 
             try
             {
@@ -52,8 +44,11 @@ namespace Recommendation_Service.Controllers
             }
             catch (Exception ex)
             {
-                return new BadRequestObjectResult(new { status = "Saving in database not successful", 
-                                                        content = (string)null });
+                return new BadRequestObjectResult(new
+                {
+                    status = "Saving in database not successful",
+                    content = (string)null
+                });
             }
 
             return new OkObjectResult(new

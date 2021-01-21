@@ -13,8 +13,8 @@ namespace Recommendation_Service.Utils
         private static readonly int MaxPoints = 250;
         public static int? FindRecommendedCategory(ApplicationDbContext dbContext, int categoryId, double price)
         {
-            var categories = dbContext.Category.ToList<Category>();
-            var category = categories.First(c => c.Id == categoryId);
+            List<Category> categories = dbContext.Category.ToList<Category>();
+            var category = categories.FirstOrDefault(c => c.Id == categoryId);
             if (category == null)
             {
                 return null;

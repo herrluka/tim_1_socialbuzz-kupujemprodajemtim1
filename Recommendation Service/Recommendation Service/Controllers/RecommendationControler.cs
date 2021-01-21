@@ -13,6 +13,8 @@ namespace Recommendation_Service.Controllers
     /// <summary>
     /// Controler used to return list of products based on received product category and product price
     /// </summary>
+    [Consumes("application/json")]
+    [Produces("application/json")]
     [ApiController]
     [Route("api")]
     public class RecommendationControler
@@ -29,18 +31,11 @@ namespace Recommendation_Service.Controllers
 
 
         [HttpGet("recommended-products")]
-        public async Task<IActionResult> GetRecommededProducts([FromHeader] string token, [FromQuery] int productCategoryId, [FromQuery] double productPrice)
+        public async Task<IActionResult> GetRecommededProducts([FromQuery] int productCategoryId, [FromQuery] double productPrice)
         {
-            
-            if (token is null)
+            if (productPrice == 0)
             {
-                return new UnauthorizedObjectResult(new { status = "Token not provided", content = (string)null });
-            }
-
-            var secretToken = Environment.GetEnvironmentVariable("API_SECRET_KEY");
-            if (token != secretToken)
-            {
-                return new UnauthorizedObjectResult(new { status = "Bad token sent", content = (string)null });
+                return new NotFoundObjectResult(new { status = "Price greater than zero not provided", content = (string)null });
             }
 
             var recommendedRank = Algorithm.FindRecommendedCategory(applicationDbContext, productCategoryId, productPrice);
