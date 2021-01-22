@@ -40,3 +40,4 @@ C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroserv
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\CommunicationKeyAuthClassLibrary.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\LoggingClassLibrary.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\authorizationMicroservice.xml
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\authorization\authorizationMicroservice\bin\Debug\net5.0\Postman\authorizationMicroservice.postman_collection.json

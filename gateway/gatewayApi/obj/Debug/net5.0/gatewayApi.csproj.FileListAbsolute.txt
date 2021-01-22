@@ -41,3 +41,4 @@ C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\gateway\gatewayApi\obj\Debug\net5.0\
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\gateway\gatewayApi\obj\Debug\net5.0\ref\gatewayApi.dll
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\gateway\gatewayApi\obj\Debug\net5.0\gatewayApi.pdb
 C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\gateway\gatewayApi\obj\Debug\net5.0\gatewayApi.genruntimeconfig.cache
+C:\Users\Marko\Desktop\Data\c#\ProjekatURIS\gateway\gatewayApi\bin\Debug\net5.0\Postman\gatewayMircoservice.postman_collection.json

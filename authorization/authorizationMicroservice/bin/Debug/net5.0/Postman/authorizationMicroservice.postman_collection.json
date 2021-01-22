@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "a903dea8-5107-4604-bc20-4b69cd649b66",
+		"name": "authorizationMicroservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "AuthorizeUser200",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "CommunicationKey",
+								"value": "Super super tezak kljuc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"UserUsername1\",\r\n    \"password\":\"userPass1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"user"
+							]
+						},
+						"description": "Primer uspesne autorizacije korisnika"
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorizeUser400",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "CommunicationKey",
+								"value": "Super super tezak kljuc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"userPass1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"user"
+							]
+						},
+						"description": "Primer zahteva sa losim telom zahteva"
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorizeUser401",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "CommunicationKey",
+								"value": "Super super tezak kljuc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"fakeUsername\",\r\n    \"password\":\"fakePass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"user"
+							]
+						},
+						"description": "Primer zahteva korisnika koji salje lose kredencijale za autorizaciju"
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorizeUser401Com",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"UserUsername1\",\r\n    \"password\":\"userPass1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"user"
+							]
+						},
+						"description": "Primer zahteva koji se salje bez tokena za komunikaciju izmedju servisa"
+					},
+					"response": []
+				}
+			],
+			"description": "Zahtevi vezani za autorizaciju korisnika",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "AuthorizeAdmin200",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "CommunicationKey",
+								"value": "Super super tezak kljuc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"AdminUsername1\",\r\n    \"password\":\"adminPass1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/admin",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"admin"
+							]
+						},
+						"description": "Primer uspesne autorizacije admina"
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorizeAdmin400",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "CommunicationKey",
+								"value": "Super super tezak kljuc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"userPass1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/admin",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"admin"
+							]
+						},
+						"description": "Primer zahteva sa losim telom zahteva"
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorizeAdmin401",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "CommunicationKey",
+								"value": "Super super tezak kljuc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"fakeUsername\",\r\n    \"password\":\"fakePass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/admin",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"admin"
+							]
+						},
+						"description": "Primer zahteva korisnika koji salje lose kredencijale za autorizaciju"
+					},
+					"response": []
+				},
+				{
+					"name": "AuthorizeAdmin401Com",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"AdminUsername1\",\r\n    \"password\":\"adminPass1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/authorize/admin",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"authorize",
+								"admin"
+							]
+						},
+						"description": "Primer zahteva koji se salje bez tokena za komunikaciju izmedju servisa"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
