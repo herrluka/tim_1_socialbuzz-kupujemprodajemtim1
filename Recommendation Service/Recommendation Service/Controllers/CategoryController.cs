@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LoggingClassLibrary;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Recommendation_Service.Data;
@@ -18,10 +19,14 @@ namespace Recommendation_Service.Controllers
     public class CategoryController
     {
         private readonly ApplicationDbContext applicationDbContext;
+        private readonly Logger logger;
+        private readonly IHttpContextAccessor contextAccessor;
 
-        public CategoryController(ApplicationDbContext applicationDbContext)
+        public CategoryController(ApplicationDbContext applicationDbContext, Logger logger, IHttpContextAccessor contextAccessor)
         {
             this.applicationDbContext = applicationDbContext;
+            this.logger = logger;
+            this.contextAccessor = contextAccessor;
         }
 
         /// <summary>
@@ -52,7 +57,6 @@ namespace Recommendation_Service.Controllers
         [HttpPost("category")]
         public IActionResult CreateNewCategory([FromBody] CategoryDto category)
         {
-            
             var newCategory = new Category()
             {
                 Id = category.Id,
@@ -61,13 +65,15 @@ namespace Recommendation_Service.Controllers
             };
 
             applicationDbContext.Category.Add(newCategory);
-
+            
             try
             {
                 applicationDbContext.SaveChangesAsync();
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Successfully created Category record {0} in database", category.Name), null);
             }
             catch (Exception ex)
             {
+                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Record with name {0} not created, reason - {1}", category.Name, ex.Message), null);
                 return new BadRequestObjectResult(new
                 {
                     status = "Saving in database not successful",

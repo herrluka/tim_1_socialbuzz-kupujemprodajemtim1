@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
 using Recommendation_Service.Data;
 using Recommendation_Service.Utils;
-using Microsoft.Extensions.Logging;
+using LoggingClassLibrary;
 
 namespace Recommendation_Service.Controllers
 {
@@ -22,14 +22,12 @@ namespace Recommendation_Service.Controllers
     {
         private readonly IProductService productService;
         private readonly ApplicationDbContext applicationDbContext;
-        private readonly ILogger logger;
         private const double recommendedPercentOfPrice = 0.05;
 
-        public RecommendationControler(IProductService productService, ApplicationDbContext applicationDbContext, ILogger logger)
+        public RecommendationControler(IProductService productService, ApplicationDbContext applicationDbContext)
         {
             this.productService = productService;
             this.applicationDbContext = applicationDbContext;
-            this.logger = logger;
         }
 
         /// <summary>
@@ -55,7 +53,6 @@ namespace Recommendation_Service.Controllers
         [HttpGet("recommended-products")]
         public async Task<IActionResult> GetRecommededProducts([FromQuery] int productCategoryId, [FromQuery] double productPrice)
         {
-
             if (productPrice == 0)
             {
                 return new NotFoundObjectResult(new { status = "Price greater than zero not provided", content = (string)null });

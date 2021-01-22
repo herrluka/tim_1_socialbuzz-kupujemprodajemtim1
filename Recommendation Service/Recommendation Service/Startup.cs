@@ -8,9 +8,6 @@ using Microsoft.OpenApi.Models;
 using Recommendation_Service.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using CommunicationKeyAuthClassLibrary;
 using LoggingClassLibrary;
@@ -36,23 +33,28 @@ namespace Recommendation_Service
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddSwaggerGen(s => {
                 s.SwaggerDoc("v1", new OpenApiInfo { Title = "Recommendation service API", Version = "v1" });
             });
+
             services.AddScoped<IProductService, FakeProductService>();
-            services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<Logger, FakeLoggerService>();
+            services.AddSingleton<ILogger, FakeLoggerService>();
+
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ConnectionStr"))
             {
                 UserID = Environment.GetEnvironmentVariable("DB_USERNAME"),
                 Password = Environment.GetEnvironmentVariable("DB_PASSWORD"),
                 Authentication = SqlAuthenticationMethod.SqlPassword
             };
+            services.AddHttpContextAccessor();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
 
     }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Logger logger)
         {
             if (env.IsDevelopment())
             {
@@ -68,7 +70,7 @@ namespace Recommendation_Service
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
-                        //TODO: add Logger
+                        logger.Log(LogLevel.Error, context.Request.HttpContext.TraceIdentifier, "", contextFeature.Error.StackTrace, contextFeature.Error);
                         await context.Response.WriteAsync(new ErrorDetails
                         {
                             StatusCode = context.Response.StatusCode,
