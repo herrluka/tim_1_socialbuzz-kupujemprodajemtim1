@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "67d875ca-f4b2-4cc1-a419-fad8852335d8",
+		"name": "URIS projekat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get recommended products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:52438/api/recommended-products?productCategoryId=3&productPrice=3000",
+					"host": [
+						"localhost"
+					],
+					"port": "52438",
+					"path": [
+						"api",
+						"recommended-products"
+					],
+					"query": [
+						{
+							"key": "productCategoryId",
+							"value": "3"
+						},
+						{
+							"key": "productPrice",
+							"value": "3000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Category",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\": 11,\r\n    \"Name\": \"Ca\",\r\n    \"Rank\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:52438/api/category",
+					"host": [
+						"localhost"
+					],
+					"port": "52438",
+					"path": [
+						"api",
+						"category"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
