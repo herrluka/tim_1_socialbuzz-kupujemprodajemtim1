@@ -13,5 +13,6 @@ namespace Transport_Service.Data
             base(options) { }
 
         public virtual DbSet<Transport> Transports { get; set; }
+        public virtual DbSet<TransportType> TransportTypes { get; set; }
     }
 }
