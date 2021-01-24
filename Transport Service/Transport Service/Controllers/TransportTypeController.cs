@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,13 @@ using Transport_Service.Models.Entities;
 
 namespace Transport_Service.Controllers
 {
+    /// <summary>
+    /// Controller that handles CRUD operations on table TransportType
+    /// </summary>
     [ApiController]
     [Route("api/transport")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     public class TransportTypeController
     {
         private readonly ApplicationDbContext context;
@@ -27,6 +33,9 @@ namespace Transport_Service.Controllers
             this.contextAccessor = contextAccessor;
         }
 
+        [SwaggerOperation(Summary = "All available transport types", Description = "Endpoint that returns all available transport types")]
+        [SwaggerResponse(200, "Returns available transport types")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpGet("type/all")]
         public IActionResult GetAllTransportTypes()
         {
@@ -34,8 +43,12 @@ namespace Transport_Service.Controllers
             return new OkObjectResult(new { status = "OK", content = transportTypes });
         }
 
+        [SwaggerOperation(summary: "Transport type by id", description: "Endpoint used by other services that returns transport type by provided transport type id")]
+        [SwaggerResponse(200, "Returns requested transport type")]
+        [SwaggerResponse(400, "Bad transport type id provided")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpGet("type/{id}")]
-        public IActionResult GetAllTransportTypes([FromRoute] int id)
+        public IActionResult GetTransportTypeById([FromRoute] int id)
         {
             var transportType = context.TransportTypes.FirstOrDefault(t => t.Id == id);
             return new OkObjectResult(new { status = "OK", content = new TransportTypeDto
@@ -45,6 +58,11 @@ namespace Transport_Service.Controllers
             });
         }
 
+        [SwaggerOperation(summary: "Create transport type", description: "Endpoint used by admin for creation of new transport type")]
+        [SwaggerResponse(201, "Successfully created")]
+        [SwaggerResponse(400, "Saving in database unsuccessful")]
+        [SwaggerResponse(415, "Bad body provided")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpPost("type")]
         public IActionResult CreateNewTransportType([FromBody] TransportTypeDto bodyTransportType)
         {
@@ -69,6 +87,10 @@ namespace Transport_Service.Controllers
             return new StatusCodeResult(201);
         }
 
+        [SwaggerOperation(summary: "Delete transport type", description: "Endpoint used by admin for deletion of existing transport type")]
+        [SwaggerResponse(200, "Successfully deleted")]
+        [SwaggerResponse(400, "Bad transport type id provided")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpDelete("type")]
         public IActionResult DeleteTransportType([FromQuery] int transportTypeId)
         {
@@ -85,7 +107,7 @@ namespace Transport_Service.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransportType]Saving in database not successful for type " + transportType.Name, null);
+                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransportType]Saving in database not successful for type " + transportType.Name, ex);
                 return new BadRequestObjectResult(new { status = "Saving in dabase not successful", content = (string)null });
             }
 

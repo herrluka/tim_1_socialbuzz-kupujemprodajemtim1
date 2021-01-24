@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "transport",
+      "launchUrl": "swagger",
       "environmentVariables": {
         "DB_USERNAME": "it9g2017",
         "DB_PASSWORD": "ftnftn2017",

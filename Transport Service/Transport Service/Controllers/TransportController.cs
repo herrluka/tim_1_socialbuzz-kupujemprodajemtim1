@@ -2,18 +2,23 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Transport_Service.Data;
 using Transport_Service.Models.DTOs;
 using Transport_Service.Models.Entities;
 
 namespace Transport_Service.Controllers
 {
+    /// <summary>
+    /// Controller that handles CRUD operations on table Transport
+    /// </summary>
     [ApiController]
     [Route("api/transport")]
+    [Consumes("application/json")]
+    [Produces("application/json")]
     public class TransportController
     {
         private readonly ApplicationDbContext context;
@@ -27,6 +32,10 @@ namespace Transport_Service.Controllers
             this.contextAccessor = contextAccessor;
         }
 
+        [SwaggerOperation(summary: "Transports by provided weight", description: "Endpoint that returns all available transport types and their prices based on sent weight parameter")]
+        [SwaggerResponse(200, "Returns available transports")]
+        [SwaggerResponse(400, "Parameter not provided")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpGet]
         public IActionResult GetAvailableTransportsByProvidedWeight([FromQuery] double weight)
         {
@@ -50,6 +59,11 @@ namespace Transport_Service.Controllers
             return new OkObjectResult(new { status = "OK", content = transports });
         }
 
+        [SwaggerOperation(summary: "Create new transport", description: "Endpoint used for creation of new transport. Transport is sent as body")]
+        [SwaggerResponse(201, "Successfully created")]
+        [SwaggerResponse(400, "Bad transport type id sent")]
+        [SwaggerResponse(415, "Bad request body sent")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpPost]
         public IActionResult CreateNewTransport([FromBody] TransportBodyDto bodyTransport)
         {
@@ -95,6 +109,11 @@ namespace Transport_Service.Controllers
             return new StatusCodeResult(201);
         }
 
+        [SwaggerOperation(summary: "Updates existing transport", description: "Endpoint used for updating of existing transport. There is applied advanced algorithm for coordianation of weight ranges")]
+        [SwaggerResponse(200, "Successfully updated")]
+        [SwaggerResponse(400, "Bad transport id provided")]
+        [SwaggerResponse(415, "Bad request body sent")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpPut]
         public IActionResult UpdateTransportDetails([FromQuery] int transportId, [FromBody] TransportBodyDto newTrasport)
         {
@@ -182,6 +201,10 @@ namespace Transport_Service.Controllers
             return new OkObjectResult(new { status = "Successfully updated", content = (string)null });
         }
 
+        [SwaggerOperation(summary: "Deletes existing transport", description: "Endpoint used for deletion of existing transport. There is applied rule that only transport record with weight range which has the biggest values can be deleted")]
+        [SwaggerResponse(200, "Successfully deleted")]
+        [SwaggerResponse(400, "Bad transport id provided")]
+        [SwaggerResponse(500, "Unexpected error")]
         [HttpDelete]
         public IActionResult DeleteTransport([FromQuery] int transportId)
         {
