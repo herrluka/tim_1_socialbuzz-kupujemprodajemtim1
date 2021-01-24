@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using loggerMicroservice.Data;
+using loggerMicroservice.Exceptions;
 using loggerMicroservice.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,7 @@ namespace loggerMicroservice.Controllers
             {
                 Log insertedLog = LogRepository.InsertLog(log);
                 if (insertedLog == null)
-                    throw new Exception("Something went wrong while inserting in the database!");
+                    throw new LogInsertException("Something went wrong while inserting in the database!");
                 return Created("", Mapper.Map<LogDto>(insertedLog));
             }
             catch (Exception ex)

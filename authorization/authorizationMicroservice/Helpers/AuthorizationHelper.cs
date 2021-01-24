@@ -53,7 +53,7 @@ namespace authorizationMicroservice.Helpers
               
               try
             {
-                 HttpResponseMessage response = await Client.GetAsync($"{Configuration["ServicesUrl:User"]}/?type={type}&username={principal.Username}");
+                 HttpResponseMessage response = await Client.GetAsync($"{Configuration["ServicesUrl:User"]}?type={type}&username={principal.Username}");
                 switch (response.StatusCode)
                 {
                     case System.Net.HttpStatusCode.OK:
