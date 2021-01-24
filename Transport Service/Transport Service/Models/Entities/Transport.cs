@@ -13,7 +13,9 @@ namespace Transport_Service.Models.Entities
     {
         [Key]
         public int Id { get; set; }
+        [Range(0, Double.MaxValue, ErrorMessage = "Minimal weight must bre greater than 0")]
         public double MinimalWeight { get; set; }
+        [Range(0, Double.MaxValue, ErrorMessage = "Maximal weight must bre greater than 0")]
         public double MaximalWeight { get; set; }
         public double Price { get; set; }
         [ForeignKey("TransportType")]

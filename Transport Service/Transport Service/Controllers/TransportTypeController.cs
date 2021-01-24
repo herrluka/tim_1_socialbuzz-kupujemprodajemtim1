@@ -29,8 +29,19 @@ namespace Transport_Service.Controllers
         [HttpGet("type/all")]
         public IActionResult GetAllTransportTypes()
         {
-            var transports = context.TransportTypes.ToList<TransportType>();
-            return new OkObjectResult(new { status = "OK", content = transports });
+            var transportTypes = context.TransportTypes.ToList();
+            return new OkObjectResult(new { status = "OK", content = transportTypes });
+        }
+
+        [HttpGet("type/{id}")]
+        public IActionResult GetAllTransportTypes([FromRoute] int id)
+        {
+            var transportType = context.TransportTypes.FirstOrDefault(t => t.Id == id);
+            return new OkObjectResult(new { status = "OK", content = new TransportTypeDto
+            {
+                Name = transportType.Name
+            }
+            });
         }
 
         [HttpPost("type")]
