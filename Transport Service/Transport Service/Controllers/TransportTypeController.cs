@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LoggingClassLibrary;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,10 +17,10 @@ namespace Transport_Service.Controllers
     public class TransportTypeController
     {
         private readonly ApplicationDbContext context;
-        private readonly ILogger logger;
+        private readonly Logger logger;
         private readonly IHttpContextAccessor contextAccessor;
 
-        public TransportTypeController(ApplicationDbContext context, ILogger logger, IHttpContextAccessor contextAccessor)
+        public TransportTypeController(ApplicationDbContext context, Logger logger, IHttpContextAccessor contextAccessor)
         {
             this.context = context;
             this.logger = logger;

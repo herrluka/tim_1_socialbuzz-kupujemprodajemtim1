@@ -17,10 +17,10 @@ namespace Transport_Service.Controllers
     public class TransportController
     {
         private readonly ApplicationDbContext context;
-        private readonly ILogger logger;
+        private readonly Logger logger;
         private readonly IHttpContextAccessor contextAccessor;
 
-        public TransportController(ApplicationDbContext context, ILogger logger, IHttpContextAccessor contextAccessor)
+        public TransportController(ApplicationDbContext context, Logger logger, IHttpContextAccessor contextAccessor)
         {
             this.context = context;
             this.logger = logger;
@@ -51,44 +51,44 @@ namespace Transport_Service.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateNewTransport([FromBody] TransportBodyDto bodyTransportType)
+        public IActionResult CreateNewTransport([FromBody] TransportBodyDto bodyTransport)
         {
-            var transportType = context.TransportTypes.FirstOrDefault(transportType => transportType.Id == bodyTransportType.TransportTypeId);
+            var transportType = context.TransportTypes.FirstOrDefault(transportType => transportType.Id == bodyTransport.TransportTypeId);
             if (transportType == null)
             {
                 return new BadRequestObjectResult(new { status = "Transport type sent in body doesn't exist", content = (string)null });
             }
 
             var allTransports = context.Transports.Where(t => t.TransportTypeId == transportType.Id).ToList();
-            if (allTransports.FirstOrDefault(t => t.MinimalWeight <= bodyTransportType.MinimalWeight && bodyTransportType.MinimalWeight <= t.MaximalWeight) is not null)
+            if (allTransports.FirstOrDefault(t => t.MinimalWeight <= bodyTransport.MinimalWeight && bodyTransport.MinimalWeight <= t.MaximalWeight) is not null)
             {
                 return new BadRequestObjectResult(new { status = "Minimal weight you are trying to set is part of existing range", content = (string)null });
             }
 
-            if (allTransports.FirstOrDefault(t => t.MinimalWeight <= bodyTransportType.MaximalWeight && bodyTransportType.MaximalWeight <= t.MaximalWeight) is not null)
+            if (allTransports.FirstOrDefault(t => t.MinimalWeight <= bodyTransport.MaximalWeight && bodyTransport.MaximalWeight <= t.MaximalWeight) is not null)
             {
                 return new BadRequestObjectResult(new { status = "Maximal weight you are trying to set is part of existing range", content = (string)null });
             }
 
             var newTransport = new Transport()
             {
-                MaximalWeight = bodyTransportType.MaximalWeight,
-                MinimalWeight = bodyTransportType.MinimalWeight,
-                Price = bodyTransportType.Price,
+                MaximalWeight = bodyTransport.MaximalWeight,
+                MinimalWeight = bodyTransport.MinimalWeight,
+                Price = bodyTransport.Price,
                 TransportTypeId = transportType.Id,
                 TransportType = transportType
             };
 
             try
             {
-                //TODO: Logger
                 context.Transports.Add(newTransport);
                 context.SaveChangesAsync();
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[CreateNewTransport]Successfully created transport with price " + bodyTransport.Price, null);
 
             }
             catch (Exception ex)
             {
-                //TODO: Logger
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[CreateNewTransport]Creating new transport not successful", ex);
                 return new BadRequestObjectResult(new { status = "Saving in database not successful", content = (string)null });
             }
 
@@ -171,9 +171,11 @@ namespace Transport_Service.Controllers
                 }
                 context.Update(transportForUpdate);
                 context.SaveChangesAsync();
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[UpdateTransportDetails]Successfully updated transport with id " + newTrasport.Id, null);
             }
-            catch
+            catch(Exception ex)
             {
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[UpdateTransportDetails] Updating transport with id " + newTrasport.Id + " not successful", ex);
                 return new BadRequestObjectResult(new { status = "Saving in database not successful", content = (string)null });
             }
 
@@ -200,11 +202,11 @@ namespace Transport_Service.Controllers
             try
             {
                 context.Transports.Remove(transport);
-                //TODO: Logger
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransport]Successfully deleted transport with id " + transport.Id, null);
             }
             catch (Exception ex)
             {
-                //TODO: Logger
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransport] Deletion for transport with id " + transport.Id + " not successful", ex);
                 return new BadRequestObjectResult(new { status = "Saving in dabase not successful", content = (string)null });
             }
 

@@ -15,6 +15,7 @@ using System;
 using System.Net;
 using Transport_Service.Data;
 using Transport_Service.Models;
+using Transport_Service.Utils;
 
 namespace Transport_Service
 {
@@ -44,6 +45,7 @@ namespace Transport_Service
             };
 
             services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<Logger, FakeLogger>();
 
             services.AddHttpContextAccessor();
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -51,7 +53,7 @@ namespace Transport_Service
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Logger logger)
         {
             if (env.IsDevelopment())
             {
@@ -67,7 +69,7 @@ namespace Transport_Service
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
-                        //logger.Log(LogLevel.Error, context.Request.HttpContext.TraceIdentifier, "", contextFeature.Error.StackTrace, contextFeature.Error);
+                        logger.Log(LogLevel.Error, context.Request.HttpContext.TraceIdentifier, "", contextFeature.Error.StackTrace, contextFeature.Error);
                         await context.Response.WriteAsync(new ErrorDetailsDto
                         {
                             StatusCode = context.Response.StatusCode,
