@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,9 +14,10 @@ namespace Transport_Service.Models.Entities
         [Key]
         public int Id { get; set; }
         public double MinimalWeight { get; set; }
-        public double MaxWeight { get; set; }
+        public double MaximalWeight { get; set; }
         public double Price { get; set; }
         [ForeignKey("TransportType")]
+        [Column(name:"TransportType")]
         public int TransportTypeId { get; set; }
         public TransportType TransportType { get; set; }
 

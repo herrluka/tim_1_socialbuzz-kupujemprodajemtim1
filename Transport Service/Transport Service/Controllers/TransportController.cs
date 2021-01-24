@@ -17,51 +17,77 @@ namespace Transport_Service.Controllers
     public class TransportController
     {
         private readonly ApplicationDbContext context;
-        private readonly Logger logger;
+        private readonly ILogger logger;
         private readonly IHttpContextAccessor contextAccessor;
 
-        public TransportController(ApplicationDbContext context, Logger logger, IHttpContextAccessor contextAccessor)
+        public TransportController(ApplicationDbContext context, ILogger logger, IHttpContextAccessor contextAccessor)
         {
             this.context = context;
             this.logger = logger;
             this.contextAccessor = contextAccessor;
         }
 
-        [HttpGet("all")]
-        public IActionResult GetAllTransportTypes()
+        [HttpGet]
+        public IActionResult GetAvailableTransportsByProvidedPrice([FromQuery] double price)
         {
-            var transports = context.TransportTypes.ToList<TransportType>();
-            return new OkObjectResult(new { status = "OK", content = transports});
+            if (price == 0)
+            {
+                return new BadRequestObjectResult(new { status = "Price greater than 0 not provided", content = (string)null });
+            }
+
+            var query = from transport in context.Transports
+                        join transportType in context.TransportTypes on transport.TransportTypeId equals transportType.Id
+                        where transport.MinimalWeight < price && price < transport.MaximalWeight
+                        select new AvailableTransportDto
+                        {
+                            Id = transport.Id,
+                            Price = transport.Price,
+                            TransportType = transport.TransportType.Name
+                        };
+
+            var transports = query.ToList();
+
+            return new OkObjectResult(new { status = "OK", content = transports });
         }
 
-        [HttpPost("type")]
-        public IActionResult CreateNewTransportType([FromBody] TransportTypeDto bodyTransportType)
+        [HttpPost]
+        public IActionResult CreateNewTransport([FromBody] TransportBodyDto bodyTransportType)
         {
-
-            //TODO: check admin
-            var newTransportType = new TransportType()
+            var transportType = context.TransportTypes.FirstOrDefault(transportType => transportType.Id == bodyTransportType.TransportTypeId);
+            if (transportType == null)
             {
-                Name = bodyTransportType.Name
+                return new BadRequestObjectResult(new { status = "Transport type sent in body doesn't exist", content = (string)null });
+            }
+
+            var newTransport = new Transport()
+            {
+                MaximalWeight = bodyTransportType.MaximalWeight,
+                MinimalWeight = bodyTransportType.MinimalWeight,
+                Price = bodyTransportType.Price,
+                TransportTypeId = transportType.Id,
+                TransportType = transportType
             };
 
             try
             {
-                context.TransportTypes.Add(newTransportType);
-                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[CreateNewTransportType]Successfully created transport type with name " + bodyTransportType.Name, null);
+                //TODO: Logger
+                context.Transports.Add(newTransport);
+                context.SaveChangesAsync();
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", "[CreateNewTransportType]Error occured for transport type " + bodyTransportType.Name + " creation", ex);
-                return new BadRequestObjectResult(new { status = "Saving in database not successful", content = (string)null});
+                //TODO: Logger
+                return new BadRequestObjectResult(new { status = "Saving in database not successful", content = (string)null });
             }
 
             return new StatusCodeResult(201);
         }
 
         [HttpDelete]
-        public IActionResult DeleteTransportType([FromQuery] int transportTypeId)
+        public IActionResult DeleteTransport([FromQuery] int transportId)
         {
-            var transport = context.TransportTypes.FirstOrDefault(type => type.Id == transportTypeId);
+            var transport = context.Transports.FirstOrDefault(type => type.Id == transportId);
             if (transport is null)
             {
                 return new BadRequestObjectResult(new { status = "Bad transport id provided", content = (string)null });
@@ -69,15 +95,50 @@ namespace Transport_Service.Controllers
 
             try
             {
-                context.TransportTypes.Remove(transport);
-                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransportType]Successfully deleted transport type with name" + transport.Name, null);
-            } catch (Exception ex)
+                context.Transports.Remove(transport);
+                //TODO: Logger
+            }
+            catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransportType]Saving in database not successful for type " + transport.Name, null);
+                //TODO: Logger
                 return new BadRequestObjectResult(new { status = "Saving in dabase not successful", content = (string)null });
             }
 
             return new OkObjectResult(new { status = "Saving in dabase not successful", content = (string)null });
+        }
+
+        [HttpPut]
+        public IActionResult UpdateTransportDetails([FromQuery] int transportId, [FromBody] TransportBodyDto newTrasport)
+        {
+            var transport = context.Transports.FirstOrDefault(transport => transport.Id == transportId);
+            if (transport == null)
+            {
+                return new BadRequestObjectResult(new { status = "Bad transport id provided", content = (string)null });
+            }
+
+            var transportType = context.TransportTypes.FirstOrDefault(transportType => transportType.Id == newTrasport.TransportTypeId);
+            if (transportType == null)
+            {
+                return new BadRequestObjectResult(new { status = "Transport type sent in body doesn't exist", content = (string)null });
+            }
+
+            transport.Price = newTrasport.Price;
+            transport.MinimalWeight = newTrasport.MinimalWeight;
+            transport.MaximalWeight = newTrasport.MaximalWeight;
+            transport.TransportType = transportType;
+            transport.TransportTypeId = transportType.Id;
+
+            try
+            {
+                //TODO : Logger
+                context.SaveChangesAsync();
+            }
+            catch
+            {
+                return new BadRequestObjectResult(new { status = "Saving in database not successful", content = (string)null });
+            }
+
+            return new StatusCodeResult(201);
         }
     }
 }
