@@ -1,22 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1.Models
+namespace ReactionsService.Models
 {
-   // [Keyless]
     /// <summary>
-    /// Predstavlja model reakcije na objavu
+    /// Dto za update Reaction-a
     /// </summary>
-    public class Reactions
+    public class ReactionUpdateDto
     {
         /// <summary>
         /// Id reakcije
         /// </summary>
-        [Key]
         public Guid ReactionID { get; set; }
 
         /// <summary>
@@ -29,9 +25,6 @@ namespace WebApplication1.Models
         /// </summary>
         public int TypeOfReactionID { get; set; }
 
-        /// <summary>
-        /// Id usera koji je dodao reakciju
-        /// </summary>
-        public int UserID { get; set; }
+        
     }
 }

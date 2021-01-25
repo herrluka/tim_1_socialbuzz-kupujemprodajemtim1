@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WebApplication1.Data;
+using WebApplication1.Entities;
 
 namespace ReactionsService
 {
@@ -27,6 +30,13 @@ namespace ReactionsService
         {
 
             services.AddControllers();
+            services.AddScoped<IReactionRepository, ReactionRepository>();
+            services.AddScoped<IProductMockRepository, ProductMockRepository>();
+
+            services.AddDbContext<ContextDB>();
+
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
         }

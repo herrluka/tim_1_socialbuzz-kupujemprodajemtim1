@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace ReactionsService.Models
         /// <summary>
         /// Id reakcije
         /// </summary>
-        public int ReactionID { get; set; }
+        public Guid ReactionID { get; set; }
 
         /// <summary>
         /// Id proizvoda na koji je dodata reakcija

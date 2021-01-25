@@ -1,24 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1.Models
+namespace ReactionsService.Models
 {
-   // [Keyless]
     /// <summary>
-    /// Predstavlja model reakcije na objavu
+    /// DTO za kreiranje Reakcije
     /// </summary>
-    public class Reactions
+    public class ReactionCreateDto
     {
-        /// <summary>
-        /// Id reakcije
-        /// </summary>
-        [Key]
-        public Guid ReactionID { get; set; }
-
         /// <summary>
         /// Id proizvoda na koji je dodata reakcija
         /// </summary>
@@ -28,10 +20,5 @@ namespace WebApplication1.Models
         /// Id tipa reakcije
         /// </summary>
         public int TypeOfReactionID { get; set; }
-
-        /// <summary>
-        /// Id usera koji je dodao reakciju
-        /// </summary>
-        public int UserID { get; set; }
     }
 }
