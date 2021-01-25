@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>loggerMicroservice</name>
+    </assembly>
+    <members>
+        <member name="M:loggerMicroservice.Controllers.LoggerController.InsertLog(loggerMicroservice.Models.Log)">
+            <summary>
+            Unos logova u bazu
+            </summary>
+            <param name="log">Log za unos</param>
+            <returns></returns>
+            <remarks>
+            Primer unosa novog loga \
+            POST 'https://localhost:5003/api/log/' \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --header 'Content-Type: application/x-www-form-urlencoded' \
+                --data-urlencode 'LogLevel=Information' \
+                --data-urlencode 'EventID=' \
+                --data-urlencode 'RequestID=H52s0299503' \
+                --data-urlencode 'PreviousRequestID=No previous request ID' \
+                --data-urlencode 'Message=Testiram samo post za logove' \
+                --data-urlencode 'ExceptionType=' \
+                --data-urlencode 'ExceptionMessage=' \
+                --data-urlencode 'TimeOfAction=01/01/2021 5:28:29 PM' \
+                --data-urlencode 'Microservice=testingMicroservice'\
+            </remarks>
+            <response code="201">Vraca kreirani log</response>
+            <response code="401">Greska pri autentifikaciji komunikacije izmedju klijenta i servisa</response>
+            <response code="400">Lose uneta polja</response>
+            <response code="500">Greska pri unosa vrednosti u bazu</response>
+        </member>
+        <member name="M:loggerMicroservice.Controllers.LoggerController.GetLogs(System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Vraćanje logova na osnovu prosledjenih parametara
+            </summary>
+            <param name="microservice">Naziv mikroservisa koji je kreirao log</param>
+            <param name="logLevel">Nivo logovanja (informacija, greška, upozorenje)</param>
+            <param name="from">Datum od kojeg je log nastao</param>
+            <param name="to">Datum do kojeg je log nastao</param>
+            <returns></returns>
+            <remarks>
+            Primer vracanja logova po datim parametrima
+            GET 'https://localhost:5003/api/log?microservice=loggerMicroservice%26logLevel=Warning%26from=17-Jan-21%2011%3A41%3A10%20PM%26to=20-Jan-21%2011%3A41%3A10%20PM' \
+            --header 'CommunicationKey: Super super tezak kljuc'
+            </remarks>
+            <response code="200">Vraca listu logova sa gore navedenim parametrima</response>
+            <response code="401">Greska pri autentifikaciji komunikacije izmedju klijenta i servisa</response>
+        </member>
+        <member name="M:loggerMicroservice.Data.LogRepository.InsertLog(loggerMicroservice.Models.Log)">
+            <summary>
+            Unos novog reda u tabelu Log u bazi
+            </summary>
+            <param name="record">log koji se unosi</param>
+            <returns></returns>
+        </member>
+        <member name="M:loggerMicroservice.Data.LogRepository.GetLogs(System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Metoda koja vraca sve logove iz baze po zadatim parametrima
+            </summary>
+            <param name="microserviceName">Naziv mikroservisa</param>
+            <param name="logLevel">Nivo logovanja</param>
+            <param name="from">Datum i vreme koji oznacavaju pocetak intervala za koji se vracaju logovi</param>
+            <param name="to">Datum i vreme koji oznacavaju kraj intervala za koji se vracaju logovi</param>
+            <returns></returns>
+        </member>
+        <member name="T:loggerMicroservice.Models.Log">
+            <summary>
+            Predstavlja model za kreiranje logova
+            </summary>
+        </member>
+        <member name="M:loggerMicroservice.Models.Log.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Predstavlja model za kreiranje logova
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.LogLevel">
+            <summary>
+            Nivo logovanja (Information,Warning,Erro)
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.EventID">
+            <summary>
+            ID event-a
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.RequestID">
+            <summary>
+            Jedinstvena oznaga http zahteva
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.PreviousRequestID">
+            <summary>
+            Predhodni identifikator zahteva
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.Message">
+            <summary>
+            Poruka našeg novog loga
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.ExceptionType">
+            <summary>
+            Tip greške koju baca ako je greška u pitanju
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.ExceptionMessage">
+            <summary>
+            Poruka greške ako je greška u pitanju
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.TimeOfAction">
+            <summary>
+            Datum i vreme logovanja
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.Microservice">
+            <summary>
+            Naziv mikroservisa koji je izvršio logovanje
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.Log.ID">
+            <summary>
+            Interni identifikator loga
+            </summary>
+        </member>
+        <member name="T:loggerMicroservice.Models.LogDto">
+            <summary>
+            Dto za logove
+            </summary>
+        </member>
+        <member name="M:loggerMicroservice.Models.LogDto.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Dto za logove
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.ID">
+            <summary>
+            Jedinstveni identifikator loga
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.LogLevel">
+            <summary>
+            Nivo logovanja
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.Message">
+            <summary>
+            Poruka za logovanje
+            </summary>
+        </member>
+        <member name="P:loggerMicroservice.Models.LogDto.Microservice">
+            <summary>
+            Naziv mikroservisa
+            </summary>
+        </member>
+    </members>
+</doc>

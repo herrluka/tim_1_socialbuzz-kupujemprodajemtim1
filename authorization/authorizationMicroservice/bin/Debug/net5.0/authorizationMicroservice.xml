@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>authorizationMicroservice</name>
+    </assembly>
+    <members>
+        <member name="M:authorizationMicroservice.Controllers.AuthorizationController.AuthorizeUser(authorizationMicroservice.Models.Principal)">
+            <summary>
+            Autorizacija korisnika
+            </summary>
+            <param name="principal">Lozinka i korisnicko ime korisnika</param>
+            <returns></returns>
+            <remarks>
+            POST 'https://localhost:5001/api/authorize/user' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+            "username":"UserUsername1",
+            "password":"userPass1"
+            }'
+            </remarks>
+            <response code="200">Vraca token za autentifikaciju korisnika</response>
+            <response code="400">Lose struktuiran principal za autentifikaciju</response>
+            <response code="401">Greska pri autentifikaciji komunikacije klijenta i servisa</response>
+        </member>
+        <member name="M:authorizationMicroservice.Controllers.AuthorizationController.AuthorizeAdmin(authorizationMicroservice.Models.Principal)">
+            <summary>
+            Autorizacija admina
+            </summary>
+            <param name="principal">Lozinka i korisnicko ime admina</param>
+            <returns>Token za autentifikaciju korisnika</returns>
+            <remarks>
+            /// POST 'https://localhost:5001/api/authorize/admin' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+            "username":"AdminUsername1",
+            "password":"adminPass1"
+            }'
+            </remarks>
+            <response code="200">Vraca token za autentifikaciju admina</response>
+            <response code="400">Lose struktuiran principal za autentifikaciju</response>
+            <response code="401">Greska pri autentifikaciji komunikacije klijenta i servisa</response>
+        </member>
+        <member name="T:authorizationMicroservice.Entities.User">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:authorizationMicroservice.Models.Principal">
+            <summary>
+            Principal za autorizaciju korisnika
+            </summary>
+        </member>
+        <member name="P:authorizationMicroservice.Models.Principal.Username">
+            <summary>
+            Korisnicko ime
+            </summary>
+        </member>
+        <member name="P:authorizationMicroservice.Models.Principal.Password">
+            <summary>
+            Lozinka
+            </summary>
+        </member>
+        <member name="T:authorizationMicroservice.Models.UserDto">
+            <summary>
+            Dto korisnika
+            </summary>
+        </member>
+        <member name="P:authorizationMicroservice.Models.UserDto.ID">
+            <summary>
+            Id korisnika
+            </summary>
+        </member>
+        <member name="P:authorizationMicroservice.Models.UserDto.Username">
+            <summary>
+            Korisnicko ime
+            </summary>
+        </member>
+        <member name="P:authorizationMicroservice.Models.UserDto.Password">
+            <summary>
+            Lozinka
+            </summary>
+        </member>
+        <member name="P:authorizationMicroservice.Models.UserDto.Salt">
+            <summary>
+            Salt vrednost korisnika
+            </summary>
+        </member>
+    </members>
+</doc>

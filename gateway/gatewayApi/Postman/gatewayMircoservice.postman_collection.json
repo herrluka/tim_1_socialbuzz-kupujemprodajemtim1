@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "45121a09-0c90-48ec-bc6a-7fb00d7090a6",
+		"name": "gatewayMircoservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AuthorizeUser200",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"UserUsername1\",\r\n    \"password\":\"userPass1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5005/api/login/user",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"login",
+						"user"
+					]
+				},
+				"description": "Autorizacija i generisanje tokena korisnika\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "AuthorizeAdmin200",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"AdminUsername1\",\r\n    \"password\":\"adminPass1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5005/api/login/admin",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"login",
+						"admin"
+					]
+				},
+				"description": "Autorizacija i kreiranje tokena admin"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogs401",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer fake.jwt.token",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5005/api/logger",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"logger"
+					]
+				},
+				"description": "Slanje zahteva sa losim ili bez tokena"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogs403",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer [uneti generisani user token]"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5005/api/logger",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"logger"
+					]
+				},
+				"description": "Slanje validnog tokena ali sa user rolom"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogs200",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer [uneti generisan admin token]",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5005/api/logger",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"logger"
+					]
+				},
+				"description": "Slanje validnog tokena sa admin rolom vraca sve logove"
+			},
+			"response": []
+		}
+	]
+}
