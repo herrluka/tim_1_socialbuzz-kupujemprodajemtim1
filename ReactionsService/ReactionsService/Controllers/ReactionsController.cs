@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using LoggingClassLibrary;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ReactionsService.Models;
 using System;
 using System.Collections.Generic;
@@ -20,21 +22,25 @@ namespace ReactionsService.Controllers
         private readonly IReactionRepository reactionRepository;
         private readonly IProductMockRepository productMockRepository;
         private readonly IMapper mapper;
+        private readonly Logger logger;
+        private readonly IHttpContextAccessor contextAccessor;
 
-        public ReactionsController(IMapper mapper, IReactionRepository reactionRepository, IProductMockRepository productMockRepository)
+        public ReactionsController(IHttpContextAccessor contextAccessor, IMapper mapper, IReactionRepository reactionRepository, IProductMockRepository productMockRepository, Logger logger)
         {
             this.reactionRepository = reactionRepository;
             this.productMockRepository = productMockRepository;
             this.mapper = mapper;
+            this.logger = logger;
+            this.contextAccessor = contextAccessor;
         }
 
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet]
-        public ActionResult<List<ReactionsDto>> GetAllReactions()
+        [HttpGet("{userID}")]
+        public ActionResult<List<ReactionsDto>> GetAllReactions(int userID)
         {
-            var reactions = reactionRepository.GetReactions();
+            var reactions = reactionRepository.GetReactions(userID);
 
             if (reactions == null)
             {
@@ -46,18 +52,17 @@ namespace ReactionsService.Controllers
         }
 
 
-    
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("byProduct/{productID}")]
-        public ActionResult GetReactionsByProductID(int productID)
+        [HttpGet("byProduct/{productID}/{userID}")]
+        public ActionResult GetReactionsByProductID( int productID, int userID)
         {
             if(productMockRepository.GetProductByID(productID) == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "There is no product with given ID");
             }
 
-            var reactions = reactionRepository.GetRectionByProductID(productID);
+            var reactions = reactionRepository.GetRectionByProductID(productID, userID);
 
             if(reactions.Count == 0)
             {
@@ -66,9 +71,6 @@ namespace ReactionsService.Controllers
 
             return Ok(mapper.Map<List<ReactionsDto>>(reactions));
         }
-
-
-
 
 
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -82,20 +84,25 @@ namespace ReactionsService.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, "There is no product with given ID");
             }
 
+            Reactions reactionEntity = mapper.Map<Reactions>(reaction);
+            reactionEntity.UserID = userID;
+
             try
-            {
-                Reactions reactionEntity = mapper.Map<Reactions>(reaction);
-                reactionEntity.UserID = userID;
+            {  
                 reactionRepository.AddReaction(reactionEntity);
                 reactionRepository.SaveChanges();
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Successfully created new reaction with ID {0} in database", reactionEntity.ReactionID), null);
+
                 return StatusCode(StatusCodes.Status201Created, "Reaction is successfully created!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Reaction with ID {0} not created, message: {1}", reactionEntity, ex.Message), null);
+
                 return StatusCode(StatusCodes.Status500InternalServerError, "Create error");
             }
-
         }
+
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -103,6 +110,10 @@ namespace ReactionsService.Controllers
         [HttpPut]
         public IActionResult UpdateReaction([FromBody] ReactionUpdateDto reaction)
         {
+            if(reactionRepository.GetReactionByID(reaction.ReactionID) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "There is no reaction with given ID!");
+            }
             try
             {
                 Reactions newReaction = mapper.Map<Reactions>(reaction);
@@ -123,10 +134,10 @@ namespace ReactionsService.Controllers
                 return StatusCode(StatusCodes.Status200OK);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Error while updating reaction with ID {0}, message: {1}", reaction.ReactionID, ex.Message), null);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Update error");
-
             }
         }
 
@@ -148,12 +159,11 @@ namespace ReactionsService.Controllers
                 reactionRepository.SaveChanges();
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Error while deleting reaction with ID {0}, message: {1}", reaction.ReactionID, ex.Message), null);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Delete error");
             }
         }
-
-
     }
 }

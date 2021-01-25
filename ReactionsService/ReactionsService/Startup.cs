@@ -11,8 +11,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ReactionsService.Data;
 using WebApplication1.Data;
 using WebApplication1.Entities;
+using CommunicationKeyAuthClassLibrary;
+using LoggingClassLibrary;
+using ReactionsService.FakeLogger;
 
 namespace ReactionsService
 {
@@ -32,8 +36,14 @@ namespace ReactionsService
             services.AddControllers();
             services.AddScoped<IReactionRepository, ReactionRepository>();
             services.AddScoped<IProductMockRepository, ProductMockRepository>();
+            services.AddScoped<IBlackListMockRepository, BlackListMockRepository>();
 
-            services.AddDbContext<ContextDB>();
+           services.AddSingleton<Logger, FakeLoggerService>();
+           services.AddSingleton<ILogger, FakeLoggerService>();
+
+           services.AddHttpContextAccessor();
+           services.AddDbContext<ContextDB>();
+
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -52,6 +62,8 @@ namespace ReactionsService
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+           app.UseMiddleware<CommunicationKeyAuthMiddleware>();
 
             app.UseAuthorization();
 

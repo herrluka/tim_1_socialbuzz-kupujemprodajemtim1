@@ -36,7 +36,7 @@ namespace WebApplication1.Data
                 },
                 new ProductDto
                 {
-                    ProductID =4,
+                    ProductID = 4,
                     ProductName = "Sto",
                     SellerID = 1,
                     Description = "Sto za kancelariju",
@@ -73,5 +73,6 @@ namespace WebApplication1.Data
             return Products.FirstOrDefault(e => e.ProductID == ID);
 
         }
+
     }
 }

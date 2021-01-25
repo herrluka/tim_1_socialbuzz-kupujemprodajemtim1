@@ -14,5 +14,14 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CommunicationKeyAuthClassLibrary">
+      <HintPath>..\..\CommunicationKeyAuthClassLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="LoggingClassLibrary">
+      <HintPath>..\..\LoggingClassLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 
 </Project>

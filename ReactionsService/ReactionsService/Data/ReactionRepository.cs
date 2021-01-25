@@ -5,36 +5,52 @@ using System.Threading.Tasks;
 using WebApplication1.Entities;
 using WebApplication1.Models;
 using Microsoft.EntityFrameworkCore;
+using ReactionsService.Data;
 
 namespace WebApplication1.Data
 {
     public class ReactionRepository : IReactionRepository
     {
         private readonly ContextDB context;
+        private readonly IBlackListMockRepository blackListRepository;
 
-        public ReactionRepository(ContextDB contextDB)
+        public ReactionRepository(ContextDB contextDB, IBlackListMockRepository blackListRepository)
         {
             context = contextDB;
+            this.blackListRepository = blackListRepository;
         }
 
-        public List<Reactions> GetReactions()
-        {
+        public List<Reactions> GetReactions(int userID)
+        {        
+           var query = from reaction in context.Reactions
+                       where !(from o in blackListRepository.GetListOfBlockedUsers(userID)
+                               select o).Contains(reaction.UserID) 
+                       select reaction;
 
-            return context.Reactions.FromSqlRaw("select * from Reactions where UserID not in (select blocked from blacklist where bloker = 6) and UserID not in (select bloker from blacklist where blocked= 6)").ToList();
+           // return context.Reactions.FromSqlRaw("select * from Reactions where UserID not in (select blocked from blacklist where bloker = 6) and UserID not in (select bloker from blacklist where blocked= 6)").ToList();
             //return context.Reactions.ToList();
            // return context.Reactions.FromSqlRaw("select * from Reactions where productID = {0}", productID).ToList();
 
-            // return context.Reactions.ToList();
+            return query.ToList();
 
         }
 
-        public List<Reactions> GetRectionByProductID(int productID)
+        public List<Reactions> GetRectionByProductID(int productID, int userID)
         {
-            return context.Reactions.FromSqlRaw("select * from Reactions where productID = {0}", productID).ToList();
+
+            var query = from reaction in context.Reactions
+                        where !(from o in blackListRepository.GetListOfBlockedUsers(userID)
+                                select o).Contains(reaction.UserID)
+                        where reaction.ProductID == productID
+                        select reaction;
+
+            return query.ToList();
+
+            //return context.Reactions.FromSqlRaw("select * from Reactions where productID = {0}", productID).ToList();
 
         }
 
-  
+
 
         public Reactions GetReactionByID(Guid reactionID)
         {

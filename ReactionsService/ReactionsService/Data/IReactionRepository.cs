@@ -8,9 +8,9 @@ namespace WebApplication1.Data
 {
     public interface IReactionRepository
     {
-        List<Reactions> GetReactions();
+        List<Reactions> GetReactions(int userID);
 
-        List<Reactions> GetRectionByProductID(int productID);
+        List<Reactions> GetRectionByProductID(int productID, int userID);
 
         public Reactions GetReactionByID(Guid reactionID);
 
