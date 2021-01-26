@@ -83,7 +83,7 @@ namespace ReactionsService.Controllers
         }
 
         [HttpPut]
-        public ActionResult UpdateTypeOfReaction(TypeOfReactionUpdateDto typeOfReaction)
+        public IActionResult UpdateTypeOfReaction(TypeOfReactionUpdateDto typeOfReaction)
         {
             var oldType = typeOfReactionRepository.GetTypeOfReactionByID(typeOfReaction.TypeOfReactionID);
 

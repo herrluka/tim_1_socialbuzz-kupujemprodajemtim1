@@ -94,6 +94,12 @@ namespace ReactionsService.Controllers
 
             }
 
+            if(reactionRepository.CheckUserWithProductID(userID, reaction.ProductID) != null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "User can add only one reaction to specific product.");
+
+            }
+
             Reactions reactionEntity = mapper.Map<Reactions>(reaction);
             reactionEntity.UserID = userID;
 

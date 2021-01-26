@@ -75,6 +75,13 @@ namespace WebApplication1.Data
             context.Remove(reaction);
         }
 
+        public Reactions CheckUserWithProductID(int userID, int productID)
+        {
+            return context.Reactions.FirstOrDefault(e => e.UserID == userID && e.ProductID == productID);
+
+        }
+
+
         public bool SaveChanges()
         {
             return context.SaveChanges() > 0;

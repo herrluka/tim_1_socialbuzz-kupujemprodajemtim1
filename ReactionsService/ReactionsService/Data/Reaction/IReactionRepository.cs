@@ -20,6 +20,8 @@ namespace WebApplication1.Data
 
         public void DeleteReaction(Guid reactionID);
 
+        public Reactions CheckUserWithProductID(int userID, int productID);
+
         bool SaveChanges();
     }
 }
