@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ReactionsService.Data;
 using ReactionsService.Models;
 using System;
 using System.Collections.Generic;
@@ -24,14 +25,17 @@ namespace ReactionsService.Controllers
         private readonly IMapper mapper;
         private readonly Logger logger;
         private readonly IHttpContextAccessor contextAccessor;
+        private readonly ITypeOfReactionRepository typeOfReactionRepository;
 
-        public ReactionsController(IHttpContextAccessor contextAccessor, IMapper mapper, IReactionRepository reactionRepository, IProductMockRepository productMockRepository, Logger logger)
+
+        public ReactionsController(ITypeOfReactionRepository typeOfReactionRepository, IHttpContextAccessor contextAccessor, IMapper mapper, IReactionRepository reactionRepository, IProductMockRepository productMockRepository, Logger logger)
         {
             this.reactionRepository = reactionRepository;
             this.productMockRepository = productMockRepository;
             this.mapper = mapper;
             this.logger = logger;
             this.contextAccessor = contextAccessor;
+            this.typeOfReactionRepository = typeOfReactionRepository;
         }
 
 
@@ -81,7 +85,13 @@ namespace ReactionsService.Controllers
         {
             if(productMockRepository.GetProductByID(reaction.ProductID) == null)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, "There is no product with given ID");
+                return StatusCode(StatusCodes.Status400BadRequest, "Product with given ID does not exist");
+            }
+
+            if(typeOfReactionRepository.GetTypeOfReactionByID(reaction.TypeOfReactionID) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "Type of reaction with given ID does not exist!");
+
             }
 
             Reactions reactionEntity = mapper.Map<Reactions>(reaction);
@@ -97,7 +107,7 @@ namespace ReactionsService.Controllers
             }
             catch (Exception ex)
             {
-                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Reaction with ID {0} not created, message: {1}", reactionEntity, ex.Message), null);
+                logger.Log(LogLevel.Error, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Reaction with ID {0} not created, message: {1}", reactionEntity.ReactionID, ex.Message), null);
 
                 return StatusCode(StatusCodes.Status500InternalServerError, "Create error");
             }
@@ -114,15 +124,21 @@ namespace ReactionsService.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "There is no reaction with given ID!");
             }
+
+            if (typeOfReactionRepository.GetTypeOfReactionByID(reaction.TypeOfReactionID) == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "Type of reaction with given ID does not exist!");
+
+            }
             try
             {
                 Reactions newReaction = mapper.Map<Reactions>(reaction);
 
                 Reactions oldReaction = reactionRepository.GetReactionByID(reaction.ReactionID);
 
-                if (newReaction.ProductID != oldReaction.ProductID || newReaction.ReactionID != oldReaction.ReactionID)
+                if (newReaction.ProductID != oldReaction.ProductID)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest, "Product ID or Reaction ID can not be changed!");
+                    return StatusCode(StatusCodes.Status400BadRequest, "Product ID can not be changed!");
 
                 }
                newReaction.UserID = oldReaction.UserID;
@@ -130,6 +146,7 @@ namespace ReactionsService.Controllers
                 mapper.Map(newReaction, oldReaction);
 
                 reactionRepository.SaveChanges();
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Successfully updated reaction with ID {0} in database", reaction.ReactionID), null);
 
                 return StatusCode(StatusCodes.Status200OK);
 
@@ -157,6 +174,8 @@ namespace ReactionsService.Controllers
             {
                 reactionRepository.DeleteReaction(reactionID);
                 reactionRepository.SaveChanges();
+                logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Successfully deleted reaction with ID {0} from database", reactionID), null);
+
                 return NoContent();
             }
             catch (Exception ex)

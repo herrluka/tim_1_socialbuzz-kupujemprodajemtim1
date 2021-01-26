@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 namespace ReactionsService.Models
 {
     /// <summary>
-    /// DTO za tip reakcije
+    /// Dto za update tipa reakcije
     /// </summary>
-    public class TypeOfReactionDto
+    public class TypeOfReactionUpdateDto
     {
-
         /// <summary>
-        /// Id tipa reakcije
+        /// ID tipa reakcije
         /// </summary>
-        public Guid TypeOfReactionID { get; set; }
+        public int TypeOfReactionID { get; set; }
 
         /// <summary>
         /// Naziv tipa reakcije

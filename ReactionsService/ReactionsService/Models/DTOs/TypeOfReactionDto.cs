@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1.Models
+namespace ReactionsService.Models
 {
     /// <summary>
-    /// Predstavlja model tipa reakcije
+    /// DTO za tip reakcije
     /// </summary>
-    public class TypeOfReaction
+    public class TypeOfReactionDto
     {
+
         /// <summary>
         /// Id tipa reakcije
         /// </summary>

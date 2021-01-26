@@ -37,17 +37,17 @@ namespace ReactionsService
             services.AddScoped<IReactionRepository, ReactionRepository>();
             services.AddScoped<IProductMockRepository, ProductMockRepository>();
             services.AddScoped<IBlackListMockRepository, BlackListMockRepository>();
+            services.AddScoped<ITypeOfReactionRepository, TypeOfReactionRepository>();
 
-           services.AddSingleton<Logger, FakeLoggerService>();
-           services.AddSingleton<ILogger, FakeLoggerService>();
 
-           services.AddHttpContextAccessor();
-           services.AddDbContext<ContextDB>();
+            services.AddSingleton<Logger, FakeLoggerService>();
+            services.AddSingleton<ILogger, FakeLoggerService>();
 
+            services.AddHttpContextAccessor();
+            services.AddDbContext<ContextDB>();
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 
         }
 

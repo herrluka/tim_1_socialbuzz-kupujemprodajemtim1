@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication1.Models
+namespace ReactionsService.Models
 {
-    /// <summary>
-    /// Predstavlja model tipa reakcije
+    // <summary>
+    /// Dto za kreiranje tipa reakcije
     /// </summary>
-    public class TypeOfReaction
+    public class TypeOfReactionCreateDto
     {
-        /// <summary>
-        /// Id tipa reakcije
-        /// </summary>
-        public int TypeOfReactionID { get; set; }
-
         /// <summary>
         /// Naziv tipa reakcije
         /// </summary>
+        [Required(ErrorMessage = "Ime reakcije je obavezno uneti!")]
         public String ReactionName { get; set; }
 
         /// <summary>
         /// Url do datog tipa reakcije
         /// </summary>
+        [Required(ErrorMessage = "Url reakcije je obavezno uneti!")]
         public String Url { get; set; }
     }
 }

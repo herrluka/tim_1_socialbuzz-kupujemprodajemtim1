@@ -19,6 +19,8 @@ namespace WebApplication1.Entities
         }
 
         public DbSet<Reactions> Reactions { get; set; }
+
+        public DbSet<TypeOfReaction> Type_Of_Reaction { get; set; }
         
 
 
