@@ -9,5 +9,8 @@ namespace Transport_Service.Data
     public interface ITransportTypeRepository
     {
         TransportType GetTransportTypeById(int tranportTypeId);
+        List<TransportType> GetAllTransportTypes();
+        void CreateNewTransportType(TransportType transportType);
+        void RemoveTransportType(TransportType transportType);
     }
 }

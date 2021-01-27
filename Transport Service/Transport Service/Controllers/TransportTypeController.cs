@@ -22,15 +22,15 @@ namespace Transport_Service.Controllers
     [Produces("application/json")]
     public class TransportTypeController
     {
-        private readonly ApplicationDbContext context;
         private readonly Logger logger;
         private readonly IHttpContextAccessor contextAccessor;
+        private readonly ITransportTypeRepository transportTypeRepository;
 
-        public TransportTypeController(ApplicationDbContext context, Logger logger, IHttpContextAccessor contextAccessor)
+        public TransportTypeController(Logger logger, IHttpContextAccessor contextAccessor, ITransportTypeRepository transportTypeRepository)
         {
-            this.context = context;
             this.logger = logger;
             this.contextAccessor = contextAccessor;
+            this.transportTypeRepository = transportTypeRepository;
         }
 
         [SwaggerOperation(Summary = "All available transport types", Description = "Endpoint that returns all available transport types")]
@@ -39,7 +39,7 @@ namespace Transport_Service.Controllers
         [HttpGet("type/all")]
         public IActionResult GetAllTransportTypes()
         {
-            var transportTypes = context.TransportTypes.ToList();
+            var transportTypes = transportTypeRepository.GetAllTransportTypes();
             return new OkObjectResult(new { status = "OK", content = transportTypes });
         }
 
@@ -50,7 +50,7 @@ namespace Transport_Service.Controllers
         [HttpGet("type/{id}")]
         public IActionResult GetTransportTypeById([FromRoute] int id)
         {
-            var transportType = context.TransportTypes.FirstOrDefault(t => t.Id == id);
+            var transportType = transportTypeRepository.GetTransportTypeById(id);
             return new OkObjectResult(new { status = "OK", content = new TransportTypeDto
             {
                 Name = transportType.Name
@@ -74,7 +74,7 @@ namespace Transport_Service.Controllers
 
             try
             {
-                context.TransportTypes.Add(newTransportType);
+                transportTypeRepository.CreateNewTransportType(newTransportType);
                 logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[CreateNewTransportType]Successfully created transport type with name " + bodyTransportType.Name, null);
 
             }
@@ -94,7 +94,7 @@ namespace Transport_Service.Controllers
         [HttpDelete("type")]
         public IActionResult DeleteTransportType([FromQuery] int transportTypeId)
         {
-            var transportType = context.TransportTypes.FirstOrDefault(type => type.Id == transportTypeId);
+            var transportType = transportTypeRepository.GetTransportTypeById(transportTypeId);
             if (transportType is null)
             {
                 return new BadRequestObjectResult(new { status = "Bad transport id provided", content = (string)null });
@@ -102,7 +102,7 @@ namespace Transport_Service.Controllers
 
             try
             {
-                context.TransportTypes.Remove(transportType);
+                transportTypeRepository.RemoveTransportType(transportType);
                 logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransportType]Successfully deleted transport type with name" + transportType.Name, null);
             }
             catch (Exception ex)

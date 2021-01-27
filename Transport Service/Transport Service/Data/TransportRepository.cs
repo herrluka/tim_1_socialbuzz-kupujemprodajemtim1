@@ -29,7 +29,6 @@ namespace Transport_Service.Data
         public void CreateNewTransport(Transport newTransport)
         {
             dbContext.Transports.Add(newTransport);
-            dbContext.SaveChangesAsync();
         }
 
         public List<Transport> GetTransportsByTransportTypeOrderByMinimalWeight(int transportTypeId)
@@ -40,7 +39,6 @@ namespace Transport_Service.Data
         public void UpdateTransport(Transport transport)
         {
             dbContext.Update(transport);
-            dbContext.SaveChangesAsync();
         }
 
         List<Transport> ITransportRepository.GetAllTransports()

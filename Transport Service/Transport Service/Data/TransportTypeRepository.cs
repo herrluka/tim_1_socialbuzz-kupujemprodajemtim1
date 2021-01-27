@@ -14,9 +14,25 @@ namespace Transport_Service.Data
         {
             this.dbContext = dbContext;
         }
+
+        public List<TransportType> GetAllTransportTypes()
+        {
+            return dbContext.TransportTypes.ToList();
+        }
+
         public TransportType GetTransportTypeById(int tranportTypeId)
         {
             return dbContext.TransportTypes.FirstOrDefault(transportType => transportType.Id == tranportTypeId);
+        }
+
+        public void CreateNewTransportType(TransportType transportType)
+        {
+            dbContext.TransportTypes.Add(transportType);
+        }
+
+        public void RemoveTransportType(TransportType transportType)
+        {
+            dbContext.TransportTypes.Remove(transportType);
         }
     }
 }
