@@ -56,7 +56,7 @@
 						},
 						{
 							"key": "TimeOfAction",
-							"value": "1/18/2021 5:28:29 PM",
+							"value": "01/01/2021 5:28:29 PM",
 							"type": "text"
 						},
 						{
@@ -67,12 +67,12 @@
 					]
 				},
 				"url": {
-					"raw": "https://localhost:5002/api/log/",
+					"raw": "https://localhost:5003/api/log/",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "5002",
+					"port": "5003",
 					"path": [
 						"api",
 						"log",
@@ -87,14 +87,24 @@
 			"name": "CreateLog400",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
 				"url": {
-					"raw": "https://localhost:5002/api/log/",
+					"raw": "https://localhost:5003/api/log/",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "5002",
+					"port": "5003",
 					"path": [
 						"api",
 						"log",
@@ -188,7 +198,7 @@
 					}
 				],
 				"url": {
-					"raw": "https://localhost:5003/api/log?microservice=badMicroservieName",
+					"raw": "https://localhost:5003/api/log?microservice=badMicroserviceName",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -201,7 +211,7 @@
 					"query": [
 						{
 							"key": "microservice",
-							"value": "badMicroservieName"
+							"value": "badMicroserviceName"
 						}
 					]
 				},
