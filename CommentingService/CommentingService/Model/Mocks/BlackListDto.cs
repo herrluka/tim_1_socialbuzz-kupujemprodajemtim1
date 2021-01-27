@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 namespace ReactionsService.Models
 {
     /// <summary>
-    /// Predstavlja model tipa reakcije
+    ///Dto model Black liste
     /// </summary>
-    public class TypeOfReaction
+    public class BlackListDto
     {
         /// <summary>
-        /// Id tipa reakcije
+        /// ID BlackListe
         /// </summary>
-        public int TypeOfReactionID { get; set; }
+        public Guid BlackListID;
 
         /// <summary>
-        /// Naziv tipa reakcije
+        /// ID korisnika koji je izvrsio blokiranje
         /// </summary>
-        public String ReactionName { get; set; }
+        public int BlockerID;
 
         /// <summary>
-        /// Url do datog tipa reakcije
+        /// ID korisnika koji je blokiran od strane drugog korisnika
         /// </summary>
-        public String Url { get; set; }
+        public int BlockedID;
     }
 }

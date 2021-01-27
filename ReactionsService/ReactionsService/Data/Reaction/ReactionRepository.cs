@@ -24,7 +24,7 @@ namespace WebApplication1.Data
         {        
            var query = from reaction in context.Reactions
                        where !(from o in blackListRepository.GetListOfBlockedUsers(userID)
-                               select o).Contains(reaction.UserID) 
+                               select o).Contains(reaction.UserID)
                        select reaction;
 
            // return context.Reactions.FromSqlRaw("select * from Reactions where UserID not in (select blocked from blacklist where bloker = 6) and UserID not in (select bloker from blacklist where blocked= 6)").ToList();

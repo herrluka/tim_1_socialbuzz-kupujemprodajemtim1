@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ReactionsService.Entities
+namespace CommentingService.Models
 {
     /// <summary>
     /// Predstavlja model proizvoda
