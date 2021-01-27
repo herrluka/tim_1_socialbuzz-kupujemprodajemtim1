@@ -8,7 +8,7 @@ namespace WebApplication1.Data
 {
     public interface IReactionRepository
     {
-        List<Reactions> GetReactions(int userID);
+        List<Reactions> GetReactions();
 
         List<Reactions> GetRectionByProductID(int productID, int userID);
 
@@ -21,6 +21,10 @@ namespace WebApplication1.Data
         public void DeleteReaction(Guid reactionID);
 
         public Reactions CheckUserWithProductID(int userID, int productID);
+
+        bool CheckDoIFollowSeller(int userID, int sellerID);
+
+        bool CheckDidIBlockedSeller(int userId, int sellerID);
 
         bool SaveChanges();
     }

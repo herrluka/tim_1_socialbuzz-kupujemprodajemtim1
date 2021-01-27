@@ -41,10 +41,10 @@ namespace ReactionsService.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{userID}")]
+        [HttpGet]
         public ActionResult<List<ReactionsDto>> GetAllReactions(int userID)
         {
-            var reactions = reactionRepository.GetReactions(userID);
+            var reactions = reactionRepository.GetReactions();
 
             if (reactions == null)
             {
@@ -58,12 +58,20 @@ namespace ReactionsService.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("byProduct/{productID}/{userID}")]
-        public ActionResult GetReactionsByProductID( int productID, int userID)
+        [HttpGet("byProductID/{productID}/{userID}")]
+        public ActionResult GetReactionsByProductID(int productID, int userID)
         {
-            if(productMockRepository.GetProductByID(productID) == null)
+            var sellerID = productMockRepository.GetProductByID(productID).SellerID;
+
+            if (productMockRepository.GetProductByID(productID) == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "There is no product with given ID");
+            }
+
+            /// korisnik ne moze videti reakcije proizvoda cije vlasnike je on blokirao ili su njega blokirali
+            if (reactionRepository.CheckDidIBlockedSeller(userID, sellerID) == true)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, String.Format("You can not see reactions on product of seller with id {0} ", sellerID));
             }
 
             var reactions = reactionRepository.GetRectionByProductID(productID, userID);
@@ -88,19 +96,25 @@ namespace ReactionsService.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, "Product with given ID does not exist");
             }
 
-            if(typeOfReactionRepository.GetTypeOfReactionByID(reaction.TypeOfReactionID) == null)
+            if (typeOfReactionRepository.GetTypeOfReactionByID(reaction.TypeOfReactionID) == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "Type of reaction with given ID does not exist!");
+            }
 
+            Reactions reactionEntity = mapper.Map<Reactions>(reaction);
+            var product = productMockRepository.GetProductByID(reaction.ProductID);
+            var sellerID = product.SellerID;
+
+            if (reactionRepository.CheckDoIFollowSeller(userID, sellerID) == false)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, String.Format("You do not follow user with id {0} and you can not add reaction to his products", sellerID));
             }
 
             if(reactionRepository.CheckUserWithProductID(userID, reaction.ProductID) != null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "User can add only one reaction to specific product.");
-
             }
 
-            Reactions reactionEntity = mapper.Map<Reactions>(reaction);
             reactionEntity.UserID = userID;
 
             try

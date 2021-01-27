@@ -23,7 +23,7 @@ namespace WebApplication1.Data
             {
                 new ProductDto
                 {
-                    ProductID = 2,
+                    ProductID = 1,
                     ProductName = "Polica",
                     SellerID = 1,
                     Description = "Polica za knjige",
@@ -39,7 +39,7 @@ namespace WebApplication1.Data
                 {
                     ProductID = 4,
                     ProductName = "Sto",
-                    SellerID = 1,
+                    SellerID = 2,
                     Description = "Sto za kancelariju",
                     Weight = "5 kg",
                     PriceID = 6,

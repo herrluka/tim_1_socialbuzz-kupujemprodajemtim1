@@ -17,6 +17,7 @@ using WebApplication1.Entities;
 using CommunicationKeyAuthClassLibrary;
 using LoggingClassLibrary;
 using ReactionsService.FakeLogger;
+using ReactionsService.Data.FollowingMock;
 
 namespace ReactionsService
 {
@@ -39,6 +40,7 @@ namespace ReactionsService
             services.AddScoped<IBlackListMockRepository, BlackListMockRepository>();
             services.AddScoped<ITypeOfReactionRepository, TypeOfReactionRepository>();
 
+            services.AddScoped<IFollowingRepository, FollowingRepository>();
 
             services.AddSingleton<Logger, FakeLoggerService>();
             services.AddSingleton<ILogger, FakeLoggerService>();

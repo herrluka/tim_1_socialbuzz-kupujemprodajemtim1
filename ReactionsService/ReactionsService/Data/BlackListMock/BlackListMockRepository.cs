@@ -69,5 +69,32 @@ namespace ReactionsService.Data
 
             return usersID;
         }
+
+        public bool DidIBlockedSeler(int userID, int sellerID)
+        {
+
+            var query = from l1 in BlackList
+                        select l1;
+
+            foreach (var v in query)
+            {
+                if (v.BlockedID == userID)
+                {
+                    if (v.BlockerID == sellerID)
+                    {
+                        return true;
+                    }
+                }
+                else if (v.BlockerID == userID)
+                {
+                    if (v.BlockedID == sellerID)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }

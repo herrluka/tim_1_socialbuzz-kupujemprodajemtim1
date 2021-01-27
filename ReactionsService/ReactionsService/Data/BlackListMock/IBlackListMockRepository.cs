@@ -7,6 +7,7 @@ namespace ReactionsService.Data
 {
     public interface IBlackListMockRepository
     {
+        public bool DidIBlockedSeler(int userID, int sellerID);
 
         List<int> GetListOfBlockedUsers(int userID);
     }

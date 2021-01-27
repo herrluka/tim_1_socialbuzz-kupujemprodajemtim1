@@ -6,6 +6,7 @@ using WebApplication1.Entities;
 using WebApplication1.Models;
 using Microsoft.EntityFrameworkCore;
 using ReactionsService.Data;
+using ReactionsService.Data.FollowingMock;
 
 namespace WebApplication1.Data
 {
@@ -13,25 +14,20 @@ namespace WebApplication1.Data
     {
         private readonly ContextDB context;
         private readonly IBlackListMockRepository blackListRepository;
+        private readonly IFollowingRepository followingRepository;
 
-        public ReactionRepository(ContextDB contextDB, IBlackListMockRepository blackListRepository)
+
+        public ReactionRepository(ContextDB contextDB, IBlackListMockRepository blackListRepository, IFollowingRepository followingRepository)
         {
             context = contextDB;
+            this.followingRepository = followingRepository;
             this.blackListRepository = blackListRepository;
         }
 
-        public List<Reactions> GetReactions(int userID)
+        public List<Reactions> GetReactions()
         {        
-           var query = from reaction in context.Reactions
-                       where !(from o in blackListRepository.GetListOfBlockedUsers(userID)
-                               select o).Contains(reaction.UserID)
-                       select reaction;
 
-           // return context.Reactions.FromSqlRaw("select * from Reactions where UserID not in (select blocked from blacklist where bloker = 6) and UserID not in (select bloker from blacklist where blocked= 6)").ToList();
-            //return context.Reactions.ToList();
-           // return context.Reactions.FromSqlRaw("select * from Reactions where productID = {0}", productID).ToList();
-
-            return query.ToList();
+            return context.Reactions.ToList();
 
         }
 
@@ -51,6 +47,15 @@ namespace WebApplication1.Data
         }
 
 
+        public bool CheckDoIFollowSeller(int userID, int sellerID)
+        {
+            return followingRepository.DoIFolloweSeler(userID, sellerID);
+        }
+
+        public bool CheckDidIBlockedSeller(int userID, int sellerID)
+        {
+            return blackListRepository.DidIBlockedSeler(userID, sellerID);
+        }
 
         public Reactions GetReactionByID(Guid reactionID)
         {
