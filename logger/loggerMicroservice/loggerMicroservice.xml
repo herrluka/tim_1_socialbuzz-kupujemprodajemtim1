@@ -45,6 +45,7 @@
             --header 'CommunicationKey: Super super tezak kljuc'
             </remarks>
             <response code="200">Vraca listu logova sa gore navedenim parametrima</response>
+            <response code="204">Ne postoje logovi sa tim parametrima</response>
             <response code="401">Greska pri autentifikaciji komunikacije izmedju klijenta i servisa</response>
         </member>
         <member name="M:loggerMicroservice.Data.LogRepository.InsertLog(loggerMicroservice.Models.Log)">
