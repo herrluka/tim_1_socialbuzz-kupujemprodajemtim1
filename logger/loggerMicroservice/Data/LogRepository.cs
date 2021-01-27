@@ -16,7 +16,7 @@ namespace loggerMicroservice.Data
             Configuration = configuration;
             database = new MongoClient(Configuration["ConnectionStrings:MongoDB"]).GetDatabase("Log");
         }
-        private IMongoDatabase database;
+        private readonly IMongoDatabase database;
 
         public IConfiguration Configuration { get; }
 

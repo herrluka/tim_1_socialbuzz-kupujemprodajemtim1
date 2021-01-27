@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using loggerMicroservice.Data;
+using loggerMicroservice.Exceptions;
 using loggerMicroservice.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,7 @@ namespace loggerMicroservice.Controllers
             {
                 Log insertedLog = LogRepository.InsertLog(log);
                 if (insertedLog == null)
-                    throw new Exception("Something went wrong while inserting in the database!");
+                    throw new LogInsertException("Something went wrong while inserting in the database!");
                 return Created("", Mapper.Map<LogDto>(insertedLog));
             }
             catch (Exception ex)
@@ -82,9 +83,11 @@ namespace loggerMicroservice.Controllers
         /// --header 'CommunicationKey: Super super tezak kljuc'
         /// </remarks>
         /// <response code="200">Vraca listu logova sa gore navedenim parametrima</response>
+        /// <response code="204">Ne postoje logovi sa tim parametrima</response>
         /// <response code="401">Greska pri autentifikaciji komunikacije izmedju klijenta i servisa</response>
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpGet]
         public ActionResult<List<Log>> GetLogs(string microservice,string logLevel,DateTime from,DateTime to)
         {
