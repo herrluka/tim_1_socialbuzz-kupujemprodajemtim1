@@ -21,15 +21,17 @@ namespace Transport_Service.Controllers
     [Produces("application/json")]
     public class TransportController
     {
-        private readonly ApplicationDbContext context;
         private readonly Logger logger;
         private readonly IHttpContextAccessor contextAccessor;
+        private readonly ITransportRepository transportRepository;
+        private readonly ITransportTypeRepository transportTypeRepository;
 
-        public TransportController(ApplicationDbContext context, Logger logger, IHttpContextAccessor contextAccessor)
+        public TransportController(Logger logger, IHttpContextAccessor contextAccessor, ITransportRepository transportRepository, ITransportTypeRepository transportTypeRepository)
         {
-            this.context = context;
             this.logger = logger;
             this.contextAccessor = contextAccessor;
+            this.transportRepository = transportRepository;
+            this.transportTypeRepository = transportTypeRepository;
         }
 
         [SwaggerOperation(summary: "Transports by provided weight", description: "Endpoint that returns all available transport types and their prices based on sent weight parameter")]
@@ -44,17 +46,7 @@ namespace Transport_Service.Controllers
                 return new BadRequestObjectResult(new { status = "Weight greater than 0 not provided", content = (string)null });
             }
 
-            var query = from transport in context.Transports
-                        join transportType in context.TransportTypes on transport.TransportTypeId equals transportType.Id
-                        where transport.MinimalWeight <= weight && weight <= transport.MaximalWeight
-                        select new AvailableTransportDto
-                        {
-                            Id = transport.Id,
-                            Price = transport.Price,
-                            TransportType = transport.TransportType.Name
-                        };
-
-            var transports = query.ToList();
+            var transports = transportRepository.GetAvailableTransportsByProvidedWeight(weight);
 
             return new OkObjectResult(new { status = "OK", content = transports });
         }
@@ -67,13 +59,13 @@ namespace Transport_Service.Controllers
         [HttpPost]
         public IActionResult CreateNewTransport([FromBody] TransportBodyDto bodyTransport)
         {
-            var transportType = context.TransportTypes.FirstOrDefault(transportType => transportType.Id == bodyTransport.TransportTypeId);
+            var transportType = transportTypeRepository.GetTransportTypeById(bodyTransport.TransportTypeId);
             if (transportType == null)
             {
                 return new BadRequestObjectResult(new { status = "Transport type sent in body doesn't exist", content = (string)null });
             }
 
-            var allTransports = context.Transports.Where(t => t.TransportTypeId == transportType.Id).ToList();
+            var allTransports = transportRepository.GetTransportsByTransportType(transportType.Id);
             if (allTransports.FirstOrDefault(t => t.MinimalWeight <= bodyTransport.MinimalWeight && bodyTransport.MinimalWeight <= t.MaximalWeight) is not null)
             {
                 return new BadRequestObjectResult(new { status = "Minimal weight you are trying to set is part of existing range", content = (string)null });
@@ -95,8 +87,7 @@ namespace Transport_Service.Controllers
 
             try
             {
-                context.Transports.Add(newTransport);
-                context.SaveChangesAsync();
+                transportRepository.CreateNewTransport(newTransport);
                 logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[CreateNewTransport]Successfully created transport with price " + bodyTransport.Price, null);
 
             }
@@ -117,13 +108,13 @@ namespace Transport_Service.Controllers
         [HttpPut]
         public IActionResult UpdateTransportDetails([FromQuery] int transportId, [FromBody] TransportBodyDto newTrasport)
         {
-            var transportType = context.TransportTypes.FirstOrDefault(transportType => transportType.Id == newTrasport.TransportTypeId);
+            var transportType = transportTypeRepository.GetTransportTypeById(newTrasport.TransportTypeId);
             if (transportType == null)
             {
                 return new BadRequestObjectResult(new { status = "Transport type sent in body doesn't exist", content = (string)null });
             }
 
-            var allTransports = context.Transports.OrderBy(t => t.MinimalWeight).Where(t => t.TransportTypeId == transportType.Id).ToList();
+            var allTransports = transportRepository.GetTransportsByTransportTypeOrderByMinimalWeight(transportType.Id);
             Transport transportForUpdate = null;
             var availableTransportsExcludingTransportForUpdate = new List<Transport>();
             foreach (var transport in allTransports)
@@ -182,14 +173,14 @@ namespace Transport_Service.Controllers
             {
                 if( previousTransport is not null)
                 {
-                    context.Update(previousTransport);
+                    transportRepository.UpdateTransport(previousTransport);
                 }
                 if (nextTransport is not null)
                 {
-                    context.Update(nextTransport);
+                    transportRepository.UpdateTransport(nextTransport);
                 }
-                context.Update(transportForUpdate);
-                context.SaveChangesAsync();
+                transportRepository.UpdateTransport(transportForUpdate);
+                
                 logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[UpdateTransportDetails]Successfully updated transport with id " + newTrasport.Id, null);
             }
             catch(Exception ex)
@@ -208,7 +199,7 @@ namespace Transport_Service.Controllers
         [HttpDelete]
         public IActionResult DeleteTransport([FromQuery] int transportId)
         {
-            var allTransports = context.Transports.ToList();
+            var allTransports = transportRepository.GetAllTransports();
             var transport = allTransports.FirstOrDefault(transport => transport.Id == transportId);
             if (transport is null)
             {
@@ -224,7 +215,7 @@ namespace Transport_Service.Controllers
 
             try
             {
-                context.Transports.Remove(transport);
+                transportRepository.RemoveTransport(transport);
                 logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", "[DeleteTransport]Successfully deleted transport with id " + transport.Id, null);
             }
             catch (Exception ex)

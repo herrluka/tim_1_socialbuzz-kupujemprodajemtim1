@@ -1,0 +1,305 @@
+{
+	"info": {
+		"_postman_id": "d0a873b0-0578-484d-88c9-1565ef8e385c",
+		"name": "Transport service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all transport types",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"url": {
+					"raw": "localhost:64638/api/transport/type/all",
+					"host": [
+						"localhost"
+					],
+					"port": "64638",
+					"path": [
+						"api",
+						"transport",
+						"type",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get transport type by id",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"url": {
+					"raw": "localhost:64638/api/transport/type/1",
+					"host": [
+						"localhost"
+					],
+					"port": "64638",
+					"path": [
+						"api",
+						"transport",
+						"type",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new transport type",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\": \"Space\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:52438/api/transport/type",
+					"host": [
+						"localhost"
+					],
+					"port": "52438",
+					"path": [
+						"api",
+						"transport",
+						"type"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete transport type",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"url": {
+					"raw": "localhost:64638/api/transport?transportTypeId=10",
+					"host": [
+						"localhost"
+					],
+					"port": "64638",
+					"path": [
+						"api",
+						"transport"
+					],
+					"query": [
+						{
+							"key": "transportTypeId",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get available transport for provided price",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"url": {
+					"raw": "localhost:64638/api/transport?price=500",
+					"host": [
+						"localhost"
+					],
+					"port": "64638",
+					"path": [
+						"api",
+						"transport"
+					],
+					"query": [
+						{
+							"key": "price",
+							"value": "500"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new transport",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Price\": 500,\r\n    \"MinimalWeight\": 200000,\r\n    \"MaximalWeight\": 300,\r\n    \"TransportTypeId\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:64638/api/transport",
+					"host": [
+						"localhost"
+					],
+					"port": "64638",
+					"path": [
+						"api",
+						"transport"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update existing transport",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Price\": 500,\r\n    \"MinimalWeight\": 501,\r\n    \"MaximalWeight\": 30000,\r\n    \"TransportTypeId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:64638/api/transport?transportId=4",
+					"host": [
+						"localhost"
+					],
+					"port": "64638",
+					"path": [
+						"api",
+						"transport"
+					],
+					"query": [
+						{
+							"key": "transportId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete existing transport",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:64638/api/transport?transportId=4",
+					"host": [
+						"localhost"
+					],
+					"port": "64638",
+					"path": [
+						"api",
+						"transport"
+					],
+					"query": [
+						{
+							"key": "transportId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

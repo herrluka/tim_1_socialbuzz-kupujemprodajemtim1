@@ -46,6 +46,8 @@ namespace Transport_Service
 
             services.AddSingleton<ILogger, Logger>();
             services.AddSingleton<Logger, FakeLogger>();
+            services.AddScoped<ITransportRepository, TransportRepository>();
+            services.AddScoped<ITransportTypeRepository, TransportTypeRepository>();
 
             services.AddHttpContextAccessor();
             services.AddDbContext<ApplicationDbContext>(options =>
