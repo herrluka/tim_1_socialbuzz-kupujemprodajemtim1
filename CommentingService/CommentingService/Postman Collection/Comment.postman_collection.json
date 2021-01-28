@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "262e7fad-e603-444a-9918-92b9834b5e1a",
+		"name": "Comment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAllComments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44328/comments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetCommentByProductID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44328/comments/byProductID?productID=1&userID=4",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"comments",
+						"byProductID"
+					],
+					"query": [
+						{
+							"key": "productID",
+							"value": "1"
+						},
+						{
+							"key": "userID",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddComment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n       \r\n        \"productID\": 1,\r\n        \"content\": \"New comment\"\r\n       \r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44328/comments/?userID=4",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"comments",
+						""
+					],
+					"query": [
+						{
+							"key": "userID",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateComment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"commentID\": \"23209e86-e2a5-4691-d1e7-48d8c11a2ff5\",\r\n        \"productID\": 3,\r\n        \"content\": \"Sve po dogovoru, brz i lak dogovor. Upadated!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44328/comments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteComment",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44328/comments?commentID=4425E07E-5F40-4ECD-7510-08D8C3ABA197",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44328",
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "commentID",
+							"value": "4425E07E-5F40-4ECD-7510-08D8C3ABA197"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

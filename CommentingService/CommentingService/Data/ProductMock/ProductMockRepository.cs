@@ -38,7 +38,7 @@ namespace CommentingService.Data
                 {
                     ProductID = 2,
                     ProductName = "Sto",
-                    SellerID = 1,
+                    SellerID = 2,
                     Description = "Sto za kancelariju",
                     Weight = "5 kg",
                     PriceID = 6,
@@ -52,7 +52,7 @@ namespace CommentingService.Data
                 {
                     ProductID = 3,
                     ProductName = "Solje",
-                    SellerID = 19,
+                    SellerID = 3,
                     Description = "Solje za kafu",
                     Weight = "300 g",
                     PriceID = 3,

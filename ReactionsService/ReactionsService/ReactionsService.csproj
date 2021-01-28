@@ -28,5 +28,9 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Postman collections\" />
+  </ItemGroup>
+
 
 </Project>

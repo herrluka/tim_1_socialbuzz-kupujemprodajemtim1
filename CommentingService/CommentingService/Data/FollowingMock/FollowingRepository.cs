@@ -23,7 +23,7 @@ namespace CommentingService.Data.FollowingMock
                 new FollowingDto
                 {
                     FollowingID = 1,
-                    FollowerID = 3,
+                    FollowerID = 4,
                     FollowedID = 1
 
                 },
