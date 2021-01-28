@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "3ef0c7ed-3217-4ee9-bfde-cc1755020376",
+		"name": "TypeOfReaction",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAllTypesOfReaction",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44360/typeOfReaction",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"typeOfReaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTypeOfReactionByID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44360/typeOfReaction/byID?typeOfReactionID=3",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"typeOfReaction",
+						"byID"
+					],
+					"query": [
+						{
+							"key": "typeOfReactionID",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddTypeOfReaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \r\n    \"reactionName\": \"Insert3\",\r\n    \"url\": \"https://upload.wikimedia.org/wikipedia/commons/8/85/Smiley.svg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44360/typeOfReaction",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"typeOfReaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateTypeOfReaction",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"typeOfReactionID\": 8,\r\n        \"reactionName\": \"Big Heart\",\r\n        \"url\": \"https://upload.wikimedia.org/wikipedia/commons/8/85/Smiley.svg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44360/typeOfReaction",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"typeOfReaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteTypeOfReaction",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44360/typeOfReaction?typeOfReactionID=14",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"typeOfReaction"
+					],
+					"query": [
+						{
+							"key": "typeOfReactionID",
+							"value": "14"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

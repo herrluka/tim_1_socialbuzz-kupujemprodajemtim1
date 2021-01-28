@@ -23,7 +23,7 @@ namespace ReactionsService.Data
                 new BlackListDto
                 {
                     BlackListID = Guid.Parse("CFD7FA84-8A27-4119-B6DB-5CFC1B0C94E1"),
-                    BlockerID = 1,
+                    BlockerID = 4,
                     BlockedID = 2
 
                 },

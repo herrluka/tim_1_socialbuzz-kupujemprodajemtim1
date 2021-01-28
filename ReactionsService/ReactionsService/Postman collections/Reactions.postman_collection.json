@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "d0ff24b7-3484-49f6-9378-164529eacfed",
+		"name": "Reactions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAllReactions",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44360/reactions/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"reactions",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetReactionsByProductID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"description": "Us",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:44360/reactions/byProductID/?userID=4&productID=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"reactions",
+						"byProductID",
+						""
+					],
+					"query": [
+						{
+							"key": "userID",
+							"value": "4"
+						},
+						{
+							"key": "productID",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateReaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"productID\": 2,\r\n        \"typeOfReactionID\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44360/reactions?userID=4",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"reactions"
+					],
+					"query": [
+						{
+							"key": "userID",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateReaction",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "  {\r\n        \"reactionID\": \"23209e86-e2a5-4691-d1e2-08d8c11a2ff5\",\r\n        \"productID\": 2,\r\n        \"typeOfReactionID\": 1\r\n    \r\n   }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44360/reactions",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"reactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteReaction",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:44360/reactions?reactionID=23209e86-e2a5-4691-d1e7-08d8c11a2ff8",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"reactions"
+					],
+					"query": [
+						{
+							"key": "reactionID",
+							"value": "23209e86-e2a5-4691-d1e7-08d8c11a2ff8"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

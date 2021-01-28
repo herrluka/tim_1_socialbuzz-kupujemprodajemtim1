@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication1.Entities;
 
 namespace WebApplication1.Data
 {
@@ -37,7 +36,7 @@ namespace WebApplication1.Data
                 },
                 new ProductDto
                 {
-                    ProductID = 4,
+                    ProductID = 2,
                     ProductName = "Sto",
                     SellerID = 2,
                     Description = "Sto za kancelariju",
@@ -51,9 +50,9 @@ namespace WebApplication1.Data
                 },
                  new ProductDto
                 {
-                    ProductID = 7,
+                    ProductID = 3,
                     ProductName = "Solje",
-                    SellerID = 19,
+                    SellerID = 3,
                     Description = "Solje za kafu",
                     Weight = "300 g",
                     PriceID = 3,

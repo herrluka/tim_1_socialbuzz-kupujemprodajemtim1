@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using LoggingClassLibrary;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ReactionsService.Data;
@@ -15,8 +14,12 @@ using WebApplication1.Models;
 
 namespace ReactionsService.Controllers
 {
+    /// <summary>
+    /// Kontroler koji izvršava CRUD operacije nad Reactions tabelom
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
 
     public class ReactionsController : ControllerBase
     {
@@ -38,11 +41,23 @@ namespace ReactionsService.Controllers
             this.typeOfReactionRepository = typeOfReactionRepository;
         }
 
-
+        /// <summary>
+        /// Vraća kreirane reakcije
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Primer zahteva
+        /// GET 'http://localhost:44360/reactions/' \
+        ///     --header 'CommunicationKey: Super super tezak kljuc'
+        /// </remarks>
+        /// <response code="200">Vraća listu reakcija</response>
+        /// <response code="404">Nisu pronađene reakcije</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
-        public ActionResult<List<ReactionsDto>> GetAllReactions(int userID)
+        public ActionResult<List<ReactionsDto>> GetAllReactions([FromHeader(Name = "CommunicationKey")] string key)
         {
             var reactions = reactionRepository.GetReactions();
 
@@ -55,41 +70,83 @@ namespace ReactionsService.Controllers
 
         }
 
-
+        /// <summary>
+        /// Vraća reakcije dodeljenje specificiranom proizvod 
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Primer zahteva
+        /// GET 'http://localhost:44360/reactions/byProductID' \
+        ///     --header 'CommunicationKey: Super super tezak kljuc' \
+        ///     --param  'productID = 1' \
+        ///     --param  'userID = 4'
+        /// </remarks>
+        /// <param name="productID">ID proizvoda</param>
+        /// <param name="userID">ID korisnika koji šalje zahtev</param>
+        /// <response code="200">Vraća listu reakcija za specificirani proizvod</response>
+        /// <response code="400">Loše kreiran zahtev</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="404">Nije pronađena reakcija sa zadatim ID-jem reakcije</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("byProductID/{productID}/{userID}")]
-        public ActionResult GetReactionsByProductID(int productID, int userID)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("byProductID")]
+        public ActionResult GetReactionsByProductID([FromHeader(Name = "CommunicationKey")] string key, [FromQuery] int productID, [FromQuery] int userID)
         {
-            var sellerID = productMockRepository.GetProductByID(productID).SellerID;
 
             if (productMockRepository.GetProductByID(productID) == null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, "There is no product with given ID");
             }
 
-            /// korisnik ne moze videti reakcije proizvoda cije vlasnike je on blokirao ili su njega blokirali
+            var sellerID = productMockRepository.GetProductByID(productID).SellerID;
+
+            // korisnik ne moze videti reakcije proizvoda cije vlasnike je on blokirao ili su njega blokirali
             if (reactionRepository.CheckDidIBlockedSeller(userID, sellerID) == true)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, String.Format("You can not see reactions on product of seller with id {0} ", sellerID));
             }
 
+            //korisnik ne moze videti reakcije koje su dodali korisnici koje je on blokirao ili su njega blokirali
             var reactions = reactionRepository.GetRectionByProductID(productID, userID);
 
             if(reactions.Count == 0)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, "This product has no reactions added");
+                return StatusCode(StatusCodes.Status404NotFound, "This product has no reactions added");
             }
 
             return Ok(mapper.Map<List<ReactionsDto>>(reactions));
         }
 
 
+        /// <summary>
+        /// Kreira novu reakciju
+        /// </summary>
+        /// <param name="reaction">Model reakcije koji se dodaje</param>
+        /// <param name="userID">ID korisnika koji pokreće zahtev</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Primer zahteva za kreiranje nove reakcije  \
+        ///  --header 'CommunicationKey: Super super tezak kljuc' \
+        ///  --param 'userID = 4' \
+        /// POST 'http://localhost:44360/reactions/' \
+        /// {     \
+        ///  "productID": 1, \
+        ///  "typeOfReactionID": 3 \
+        /// }
+        /// </remarks>
+        /// <response code="201">Vraća potvrdu da je kreirana nova reakcija</response>
+        /// <response code="400">Loše kreiran zahtev</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="500">Greška na serveru prilikom čuvanja reakcije.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpPost("{userID}")]
-        public IActionResult AddReactionToProduct([FromBody] ReactionCreateDto reaction, int userID)
+        [Consumes("application/json")]
+        [HttpPost]
+        public IActionResult AddReactionToProduct([FromHeader(Name = "CommunicationKey")] string key, [FromBody] ReactionCreateDto reaction, [FromQuery] int userID)
         {
             if(productMockRepository.GetProductByID(reaction.ProductID) == null)
             {
@@ -133,16 +190,37 @@ namespace ReactionsService.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Vrši brisanje jedne reakcije na osnovu ID-ja reakcije.
+        /// </summary>
+        /// <param name="reaction">Model reakcije koja se ažurira</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Primer zahteva za modifikaciju reakcije  \
+        ///  --header 'CommunicationKey: Super super tezak kljuc'  \
+        /// PUT 'http://localhost:44360/reactions' \
+        ///{ \
+        /// "reactionID": "23209e86-e2a5-4691-d1e2-08d8c11a2ff5", \
+        /// "productID": 2, \
+        /// "typeOfReactionID": 3,        
+        ///  "userID": 1 \
+        ///  }
+        /// </remarks>
+        /// <response code="200">Vraća potvrdu da je uspešno izmenjena reakcija</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="404">Nije pronađena reakcija za ažuriranje</response>
+        /// <response code="500">Greška na serveru prilikom modifikacije reakcije</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Consumes("application/json")]
         [HttpPut]
-        public IActionResult UpdateReaction([FromBody] ReactionUpdateDto reaction)
+        public IActionResult UpdateReaction([FromHeader(Name = "CommunicationKey")] string key, [FromBody] ReactionUpdateDto reaction)
         {
             if(reactionRepository.GetReactionByID(reaction.ReactionID) == null)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, "There is no reaction with given ID!");
+                return StatusCode(StatusCodes.Status404NotFound, "There is no reaction with given ID!");
             }
 
             if (typeOfReactionRepository.GetTypeOfReactionByID(reaction.TypeOfReactionID) == null)
@@ -178,12 +256,27 @@ namespace ReactionsService.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Vrši brisanje jedne reakcije na osnovu ID-ja reakcije.
+        /// </summary>
+        /// <param name="reactionID">ID reakcije koja se briše</param>
+        /// <remarks>        
+        /// Primer zahteva
+        /// DELETE 'http://localhost:44360/reactions' \
+        ///     --header 'CommunicationKey: Super super tezak kljuc' \
+        ///     --param  'reactionID = 23209e86-e2a5-4691-d1e7-08d8c11a2ff8'
+        /// </remarks>
+        /// <returns>Status 204 (NoContent)</returns>
+        /// <response code="204">Reakcija je uspešno obrisana</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="404">Nije pronađena reakcija za brisanje</response>
+        /// <response code="500">Došlo je do greške na serveru prilikom brisanja reakcije</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpDelete("{reactionID}")]
-        public IActionResult DeleteReacion(Guid reactionID)
+        [HttpDelete]
+        public IActionResult DeleteReacion([FromHeader(Name = "CommunicationKey")] string key, [FromQuery] Guid reactionID)
         {
             var reaction = reactionRepository.GetReactionByID(reactionID);
             if(reaction == null)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +18,8 @@ using CommunicationKeyAuthClassLibrary;
 using LoggingClassLibrary;
 using ReactionsService.FakeLogger;
 using ReactionsService.Data.FollowingMock;
+using System.Reflection;
+using System.IO;
 
 namespace ReactionsService
 {
@@ -48,6 +50,35 @@ namespace ReactionsService
             services.AddHttpContextAccessor();
             services.AddDbContext<ContextDB>();
 
+            //definisem svoj swagger dokument
+            services.AddSwaggerGen(setupAction =>
+            {
+                setupAction.SwaggerDoc("ReactionsOpenApiSpecification", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "Reactions API",
+                    Version = "1",
+                    Description = "Pomoću ovog API-ja moguće je pregledati dodate reakcije, dodavati nove, modifikovati i brisati postojeće",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    {
+                        Name = "Nataša Zvekić",
+                        Email = "natasa.zvekic@uns.ac.rs"
+                    },
+                    License = new Microsoft.OpenApi.Models.OpenApiLicense
+                    {
+                        Name = "FTN licenca"
+                    }
+                    
+                    
+                  
+                });
+
+                var xmlComments = $"{Assembly.GetExecutingAssembly().GetName().Name }.xml";
+                var xmlCommentsPath = Path.Combine(AppContext.BaseDirectory, xmlComments); //spaja vise stringova
+
+                setupAction.IncludeXmlComments(xmlCommentsPath); //da bi swagger mogao citati xml komenatare
+            });
+
+
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -65,7 +96,14 @@ namespace ReactionsService
 
             app.UseRouting();
 
-           app.UseMiddleware<CommunicationKeyAuthMiddleware>();
+            app.UseSwagger();
+
+            app.UseSwaggerUI(setupAction => {
+                setupAction.SwaggerEndpoint("/swagger/ReactionsOpenApiSpecification/swagger.json", "Reactions API");
+              //  setupAction.RoutePrefix = "";
+            });
+
+            app.UseMiddleware<CommunicationKeyAuthMiddleware>();
 
             app.UseAuthorization();
 

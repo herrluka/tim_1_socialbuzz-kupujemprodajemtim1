@@ -9,12 +9,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication1.Models;
 
 namespace ReactionsService.Controllers
 {
+    /// <summary>
+    /// Kontroler koji izvesava CRUD operacij nad tabelom Tip reakcije
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
 
 
     public class TypeOfReactionController : ControllerBase
@@ -33,8 +36,23 @@ namespace ReactionsService.Controllers
             this.contextAccessor = contextAccessor;
         }
 
+        /// <summary>
+        /// Vraca kreirane tipove reakcija
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Primer zahteva
+        /// GET 'http://localhost:44360/typeOfReaction/' \
+        ///     --header 'CommunicationKey: Super super tezak kljuc' 
+        /// </remarks>
+        /// <response code="200">Vraća listu tipova reakcija</response>
+        /// <response code="404">Nisu pronađeni tipovi reakcija</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
-         public ActionResult<List<TypeOfReactionDto>> GetAllTypesOfReaction(int userID)
+         public ActionResult<List<TypeOfReactionDto>> GetAllTypesOfReaction([FromHeader(Name = "CommunicationKey")] string key)
          {
             var types = typeOfReactionRepository.GetAllTypesOfReaction();
 
@@ -47,22 +65,60 @@ namespace ReactionsService.Controllers
          }
 
 
-        [HttpGet("{typeOfReactionID}")]
-        public ActionResult GetTypeOfReactionByID (int typeOfReactionID)
+        /// <summary>
+        /// Vraća tip reakcije na osnovu ID-ja tipa reakcija
+        /// </summary>
+        /// <returns></returns>
+        /// <remarks>
+        /// Primer zahteva
+        /// GET 'https://localhost:44360/typeOfReaction/byID' \
+        ///     --header 'CommunicationKey: Super super tezak kljuc'  \
+        ///     --param  'typeOfReactionID = 1'  
+        /// </remarks>
+        /// <param name="typeOfReactionID">ID tipa reakacije</param>
+        /// <response code="200">Vraća tip rekacije</response>
+        /// <response code="404">Nije pronađen tip reakcije sad prosleđenim ID-jem tipa reakcije</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("byID")]
+        public ActionResult GetTypeOfReactionByID ([FromHeader(Name = "CommunicationKey")] string key, [FromQuery] int typeOfReactionID)
         {
             var type = typeOfReactionRepository.GetTypeOfReactionByID(typeOfReactionID);
 
             if(type == null)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, "There is no type of reaction with given ID");
+                return StatusCode(StatusCodes.Status404NotFound, "There is no type of reaction with given ID");
             }
 
             return Ok(mapper.Map<TypeOfReactionDto>(type));
 
         }
 
+        /// <summary>
+        /// Kreira novi tip reakcije
+        /// </summary>
+        /// <param name="typeOfReaction">Model tipa reakcije</param>
+        /// <param name="key"> CommunicationKey</param>
+        /// <remarks>
+        /// Primer zahteva za kreiranje novog tipa reakcije \
+        ///   --header 'CommunicationKey: Super super tezak kljuc' \
+        /// POST https://localhost:44360/typeOfReaction \
+        /// {   \
+        ///  "reactionName": "Insert", \
+        ///  "url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Smiley.svg" \
+        /// }
+        /// </remarks>
+        /// <response code="201">Vraća potvrdu da je uspešno kreiran novi tip reakcije</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="500">Došlo je do greške na serveru prilikom kreiranja tipa reakcije</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Consumes("application/json")]
         [HttpPost]
-        public IActionResult AddTypeOfReaction([FromBody] TypeOfReactionCreateDto typeOfReaction)
+        public IActionResult AddTypeOfReaction([FromHeader(Name = "CommunicationKey")] string key, [FromBody] TypeOfReactionCreateDto typeOfReaction)
         {
             TypeOfReaction type = mapper.Map<TypeOfReaction>(typeOfReaction);
 
@@ -82,14 +138,37 @@ namespace ReactionsService.Controllers
 
         }
 
+        /// <summary>
+        /// Ažurira jedan tip rekacije na osnovu ID-ja tipa reakcije
+        /// </summary>
+        /// <param name="typeOfReaction">Model tipa reakcije koji se ažurira</param>
+        /// <remarks>
+        /// Primer zahteva za modifikovanje tipa reakcije \
+        ///    --header 'CommunicationKey: Super super tezak kljuc' \
+        /// PUT  https://localhost:44360/typeOfReaction \
+        /// { \
+        /// "typeOfReactionID": 8, \
+        /// "reactionName": "Big heart", \
+        /// "url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Smiley.svg" \
+        ///}
+        /// </remarks>
+        /// <response code="200">Vraća potvrdu da je uspešno ažuriran tip reakcije</response>
+        /// <response code="404">Tip reakcije koji se ažurira nije pronađen</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="500">Došlo je do greške na serveru prilikom ažuriranja tipa reakcije</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Consumes("application/json")]
         [HttpPut]
-        public IActionResult UpdateTypeOfReaction(TypeOfReactionUpdateDto typeOfReaction)
+        public IActionResult UpdateTypeOfReaction([FromHeader(Name = "CommunicationKey")] string key, TypeOfReactionUpdateDto typeOfReaction)
         {
             var oldType = typeOfReactionRepository.GetTypeOfReactionByID(typeOfReaction.TypeOfReactionID);
 
             if (oldType == null)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, "There is no type of reaction with given ID");
+                return StatusCode(StatusCodes.Status404NotFound, "There is no type of reaction with given ID");
             }
             
             var newType = mapper.Map<TypeOfReaction>(typeOfReaction);
@@ -110,9 +189,26 @@ namespace ReactionsService.Controllers
             }
         }
 
-
-        [HttpDelete("{typeOfReactionID}")]
-        public IActionResult DeleteTypeOfReaction(int typeOfReactionID)
+        /// <summary>
+        /// Vrši brisanje jednog tipa reakcije na osnovu ID-ja tipa reakcije.
+        /// </summary>
+        /// <param name="typeOfReactionID">ID tipa reakcije koji se briše</param>
+        /// <remarks>        
+        /// Primer zahteva
+        /// DELETE 'https://localhost:44360/typeOfReaction/' \
+        ///     --header 'CommunicationKey: Super super tezak kljuc' \
+        ///     --param  'typeOfReactionID = 14'
+        /// </remarks>
+        /// <response code="204">Tip reakcije je uspešno obrisan</response>
+        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="404">Nije pronađen tip reakcije za brisanje</response>
+        /// <response code="500">Došlo je do greške na serveru prilikom brisanja tipa reakcije</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpDelete]
+        public IActionResult DeleteTypeOfReaction([FromHeader(Name = "CommunicationKey")] string key, [FromQuery] int typeOfReactionID)
         {
             var type = typeOfReactionRepository.GetTypeOfReactionByID(typeOfReactionID);
 
@@ -127,7 +223,7 @@ namespace ReactionsService.Controllers
                 typeOfReactionRepository.SaveChanges();
                 logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Successfully deleted type of reaction with ID {0} from database", typeOfReactionID), null);
 
-                return StatusCode(StatusCodes.Status200OK);
+                return StatusCode(StatusCodes.Status204NoContent);
             }
             catch (Exception ex)
             {
