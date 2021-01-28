@@ -46,8 +46,8 @@ namespace ReactionsService.Controllers
         ///     --header 'CommunicationKey: Super super tezak kljuc' 
         /// </remarks>
         /// <response code="200">Vraća listu tipova reakcija</response>
+        /// <response code="401">Greška pri autentifikaciji</response>
         /// <response code="404">Nisu pronađeni tipovi reakcija</response>
-        /// <response code="401">Pogrešna autentifikacija</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -139,7 +139,7 @@ namespace ReactionsService.Controllers
         }
 
         /// <summary>
-        /// Ažurira jedan tip rekacije na osnovu ID-ja tipa reakcije
+        /// Vrši izmenu jednog tipa rekacije na osnovu ID-ja tipa reakcije
         /// </summary>
         /// <param name="typeOfReaction">Model tipa reakcije koji se ažurira</param>
         /// <remarks>
@@ -154,7 +154,7 @@ namespace ReactionsService.Controllers
         /// </remarks>
         /// <response code="200">Vraća potvrdu da je uspešno ažuriran tip reakcije</response>
         /// <response code="404">Tip reakcije koji se ažurira nije pronađen</response>
-        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="401">Greška pri autentifikaciji</response>
         /// <response code="500">Došlo je do greške na serveru prilikom ažuriranja tipa reakcije</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -200,7 +200,7 @@ namespace ReactionsService.Controllers
         ///     --param  'typeOfReactionID = 14'
         /// </remarks>
         /// <response code="204">Tip reakcije je uspešno obrisan</response>
-        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="401">Greška pri autentifikaciji</response>
         /// <response code="404">Nije pronađen tip reakcije za brisanje</response>
         /// <response code="500">Došlo je do greške na serveru prilikom brisanja tipa reakcije</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]

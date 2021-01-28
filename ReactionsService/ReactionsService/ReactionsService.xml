@@ -21,25 +21,29 @@
             </remarks>
             <response code="200">Vraća listu reakcija</response>
             <response code="404">Nisu pronađene reakcije</response>
-            <response code="401">Pogrešna autentifikacija</response>
+            <response code="401">Greška pri autentifikaciji</response>
         </member>
         <member name="M:ReactionsService.Controllers.ReactionsController.GetReactionsByProductID(System.String,System.Int32,System.Int32)">
             <summary>
-            Vraća reakcije dodeljenje specificiranom proizvod 
+            Vraća reakcije dodeljene specificiranom proizvodu
             </summary>
             <returns></returns>
             <remarks>
-            Primer zahteva
             GET 'http://localhost:44360/reactions/byProductID' \
+            Primer zahteva koji prolazi \
                 --header 'CommunicationKey: Super super tezak kljuc' \
                 --param  'productID = 1' \
-                --param  'userID = 4'
+                --param  'userID = 4' \
+            Primer zahteva koji ne prolazi jer je korisnik sa ID-jem 4 blokirao korisnika sa ID-jem 2, koji je vlasnik proizvoda sa ID-jem 2, i ne može videti njegove proizvode \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'productID = 2' \
+                --param  'userID = 4 
             </remarks>
             <param name="productID">ID proizvoda</param>
             <param name="userID">ID korisnika koji šalje zahtev</param>
             <response code="200">Vraća listu reakcija za specificirani proizvod</response>
             <response code="400">Loše kreiran zahtev</response>
-            <response code="401">Pogrešna autentifikacija</response>
+            <response code="401">Greška pri autentifikaciji</response>
             <response code="404">Nije pronađena reakcija sa zadatim ID-jem reakcije</response>
         </member>
         <member name="M:ReactionsService.Controllers.ReactionsController.AddReactionToProduct(System.String,ReactionsService.Models.ReactionCreateDto,System.Int32)">
@@ -50,14 +54,28 @@
             <param name="userID">ID korisnika koji pokreće zahtev</param>
             <returns></returns>
             <remarks>
-            Primer zahteva za kreiranje nove reakcije  \
+            POST 'http://localhost:44360/reactions/' \
+            Primer zahteva za kreiranje nove reakcije koji prolazi \
              --header 'CommunicationKey: Super super tezak kljuc' \
              --param 'userID = 4' \
-            POST 'http://localhost:44360/reactions/' \
             {     \
              "productID": 1, \
              "typeOfReactionID": 3 \
-            }
+            } \
+            Primer zahteva za kreiranje nove reakcije koji ne prolazi (ukoliko je prethodni zahtev izvršen), jer korisnik ne može dodati više od jedne reakcije na jedan proizvod \
+             --header 'CommunicationKey: Super super tezak kljuc' \
+             --param 'userID = 4' \
+            {     \
+             "productID": 1, \
+             "typeOfReactionID": 2 \
+            }  \
+             Primer zahteva za kreiranje novog komentara koji ne prolazi jer korisnik sa ID-jem 4 ne prati korisnika sa ID-jem 3, koji je vlasnik proizvoda sa ID-jem 3, i ne može dodavati reakcije na njegove proizvode \
+             --header 'CommunicationKey: Super super tezak kljuc' \
+             --param 'userID = 4' \
+            {     \
+             "productID": 3, \
+             "typeOfReactionID": 3 \
+            } 
             </remarks>
             <response code="201">Vraća potvrdu da je kreirana nova reakcija</response>
             <response code="400">Loše kreiran zahtev</response>
@@ -66,7 +84,7 @@
         </member>
         <member name="M:ReactionsService.Controllers.ReactionsController.UpdateReaction(System.String,ReactionsService.Models.ReactionUpdateDto)">
              <summary>
-             Vrši brisanje jedne reakcije na osnovu ID-ja reakcije.
+             Vrši izmenu jedne reakcije na osnovu ID-ja reakcije.
              </summary>
              <param name="reaction">Model reakcije koja se ažurira</param>
              <returns></returns>
@@ -76,13 +94,12 @@
              PUT 'http://localhost:44360/reactions' \
             { \
              "reactionID": "23209e86-e2a5-4691-d1e2-08d8c11a2ff5", \
-             "productID": 2, \
-             "typeOfReactionID": 3,        
-              "userID": 1 \
+             "productID": 4, \
+             "typeOfReactionID": 3       \
               }
              </remarks>
              <response code="200">Vraća potvrdu da je uspešno izmenjena reakcija</response>
-             <response code="401">Pogrešna autentifikacija</response>
+             <response code="401">Greška pri autentifikaciji</response>
              <response code="404">Nije pronađena reakcija za ažuriranje</response>
              <response code="500">Greška na serveru prilikom modifikacije reakcije</response>
         </member>
@@ -95,11 +112,11 @@
             Primer zahteva
             DELETE 'http://localhost:44360/reactions' \
                 --header 'CommunicationKey: Super super tezak kljuc' \
-                --param  'reactionID = 23209e86-e2a5-4691-d1e2-08d8c11a2ff1'
+                --param  'reactionID = 23209e86-e2a5-4691-d1e7-08d8c11a2ff7'
             </remarks>
             <returns>Status 204 (NoContent)</returns>
             <response code="204">Reakcija je uspešno obrisana</response>
-            <response code="401">Pogrešna autentifikacija</response>
+            <response code="401">Greška pri autentifikaciji</response>
             <response code="404">Nije pronađena reakcija za brisanje</response>
             <response code="500">Došlo je do greške na serveru prilikom brisanja reakcije</response>
         </member>
@@ -119,8 +136,8 @@
                 --header 'CommunicationKey: Super super tezak kljuc' 
             </remarks>
             <response code="200">Vraća listu tipova reakcija</response>
+            <response code="401">Greška pri autentifikaciji</response>
             <response code="404">Nisu pronađeni tipovi reakcija</response>
-            <response code="401">Pogrešna autentifikacija</response>
         </member>
         <member name="M:ReactionsService.Controllers.TypeOfReactionController.GetTypeOfReactionByID(System.String,System.Int32)">
             <summary>
@@ -159,7 +176,7 @@
         </member>
         <member name="M:ReactionsService.Controllers.TypeOfReactionController.UpdateTypeOfReaction(System.String,ReactionsService.Models.TypeOfReactionUpdateDto)">
              <summary>
-             Ažurira jedan tip rekacije na osnovu ID-ja tipa reakcije
+             Vrši izmenu jednog tipa rekacije na osnovu ID-ja tipa reakcije
              </summary>
              <param name="typeOfReaction">Model tipa reakcije koji se ažurira</param>
              <remarks>
@@ -174,7 +191,7 @@
              </remarks>
              <response code="200">Vraća potvrdu da je uspešno ažuriran tip reakcije</response>
              <response code="404">Tip reakcije koji se ažurira nije pronađen</response>
-             <response code="401">Pogrešna autentifikacija</response>
+             <response code="401">Greška pri autentifikaciji</response>
              <response code="500">Došlo je do greške na serveru prilikom ažuriranja tipa reakcije</response>
         </member>
         <member name="M:ReactionsService.Controllers.TypeOfReactionController.DeleteTypeOfReaction(System.String,System.Int32)">
@@ -186,10 +203,10 @@
             Primer zahteva
             DELETE 'https://localhost:44360/typeOfReaction/' \
                 --header 'CommunicationKey: Super super tezak kljuc' \
-                --param  'typeOfReactionID = 13'
+                --param  'typeOfReactionID = 14'
             </remarks>
             <response code="204">Tip reakcije je uspešno obrisan</response>
-            <response code="401">Pogrešna autentifikacija</response>
+            <response code="401">Greška pri autentifikaciji</response>
             <response code="404">Nije pronađen tip reakcije za brisanje</response>
             <response code="500">Došlo je do greške na serveru prilikom brisanja tipa reakcije</response>
         </member>

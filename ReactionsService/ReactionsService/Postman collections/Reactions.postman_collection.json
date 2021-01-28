@@ -144,7 +144,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "  {\r\n        \"reactionID\": \"23209e86-e2a5-4691-d1e2-08d8c11a2ff5\",\r\n        \"productID\": 2,\r\n        \"typeOfReactionID\": 1\r\n    \r\n   }",
+					"raw": "  {\r\n        \"reactionID\": \"23209e86-e2a5-4691-d1e2-08d8c11a2ff5\",\r\n        \"productID\": 4,\r\n        \"typeOfReactionID\": 1\r\n    \r\n   }",
 					"options": {
 						"raw": {
 							"language": "json"

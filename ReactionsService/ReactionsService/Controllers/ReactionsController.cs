@@ -52,7 +52,7 @@ namespace ReactionsService.Controllers
         /// </remarks>
         /// <response code="200">Vraća listu reakcija</response>
         /// <response code="404">Nisu pronađene reakcije</response>
-        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="401">Greška pri autentifikaciji</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -71,21 +71,25 @@ namespace ReactionsService.Controllers
         }
 
         /// <summary>
-        /// Vraća reakcije dodeljenje specificiranom proizvod 
+        /// Vraća reakcije dodeljene specificiranom proizvodu
         /// </summary>
         /// <returns></returns>
         /// <remarks>
-        /// Primer zahteva
         /// GET 'http://localhost:44360/reactions/byProductID' \
+        /// Primer zahteva koji prolazi \
         ///     --header 'CommunicationKey: Super super tezak kljuc' \
         ///     --param  'productID = 1' \
-        ///     --param  'userID = 4'
+        ///     --param  'userID = 4' \
+        /// Primer zahteva koji ne prolazi jer je korisnik sa ID-jem 4 blokirao korisnika sa ID-jem 2, koji je vlasnik proizvoda sa ID-jem 2, i ne može videti njegove proizvode \
+        ///     --header 'CommunicationKey: Super super tezak kljuc' \
+        ///     --param  'productID = 2' \
+        ///     --param  'userID = 4 
         /// </remarks>
         /// <param name="productID">ID proizvoda</param>
         /// <param name="userID">ID korisnika koji šalje zahtev</param>
         /// <response code="200">Vraća listu reakcija za specificirani proizvod</response>
         /// <response code="400">Loše kreiran zahtev</response>
-        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="401">Greška pri autentifikaciji</response>
         /// <response code="404">Nije pronađena reakcija sa zadatim ID-jem reakcije</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -105,7 +109,7 @@ namespace ReactionsService.Controllers
             // korisnik ne moze videti reakcije proizvoda cije vlasnike je on blokirao ili su njega blokirali
             if (reactionRepository.CheckDidIBlockedSeller(userID, sellerID) == true)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, String.Format("You can not see reactions on product of seller with id {0} ", sellerID));
+                return StatusCode(StatusCodes.Status400BadRequest, String.Format("You can not see products with sellerID {0} ", sellerID));
             }
 
             //korisnik ne moze videti reakcije koje su dodali korisnici koje je on blokirao ili su njega blokirali
@@ -127,14 +131,28 @@ namespace ReactionsService.Controllers
         /// <param name="userID">ID korisnika koji pokreće zahtev</param>
         /// <returns></returns>
         /// <remarks>
-        /// Primer zahteva za kreiranje nove reakcije  \
+        /// POST 'http://localhost:44360/reactions/' \
+        /// Primer zahteva za kreiranje nove reakcije koji prolazi \
         ///  --header 'CommunicationKey: Super super tezak kljuc' \
         ///  --param 'userID = 4' \
-        /// POST 'http://localhost:44360/reactions/' \
         /// {     \
         ///  "productID": 1, \
         ///  "typeOfReactionID": 3 \
-        /// }
+        /// } \
+        /// Primer zahteva za kreiranje nove reakcije koji ne prolazi (ukoliko je prethodni zahtev izvršen), jer korisnik ne može dodati više od jedne reakcije na jedan proizvod \
+        ///  --header 'CommunicationKey: Super super tezak kljuc' \
+        ///  --param 'userID = 4' \
+        /// {     \
+        ///  "productID": 1, \
+        ///  "typeOfReactionID": 2 \
+        /// }  \
+        ///  Primer zahteva za kreiranje novog komentara koji ne prolazi jer korisnik sa ID-jem 4 ne prati korisnika sa ID-jem 3, koji je vlasnik proizvoda sa ID-jem 3, i ne može dodavati reakcije na njegove proizvode \
+        ///  --header 'CommunicationKey: Super super tezak kljuc' \
+        ///  --param 'userID = 4' \
+        /// {     \
+        ///  "productID": 3, \
+        ///  "typeOfReactionID": 3 \
+        /// } 
         /// </remarks>
         /// <response code="201">Vraća potvrdu da je kreirana nova reakcija</response>
         /// <response code="400">Loše kreiran zahtev</response>
@@ -164,7 +182,7 @@ namespace ReactionsService.Controllers
 
             if (reactionRepository.CheckDoIFollowSeller(userID, sellerID) == false)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, String.Format("You do not follow user with id {0} and you can not add reaction to his products", sellerID));
+                return StatusCode(StatusCodes.Status400BadRequest, String.Format("You are not following user with id {0} and you can not add reaction to his products", sellerID));
             }
 
             if(reactionRepository.CheckUserWithProductID(userID, reaction.ProductID) != null)
@@ -191,7 +209,7 @@ namespace ReactionsService.Controllers
         }
 
         /// <summary>
-        /// Vrši brisanje jedne reakcije na osnovu ID-ja reakcije.
+        /// Vrši izmenu jedne reakcije na osnovu ID-ja reakcije.
         /// </summary>
         /// <param name="reaction">Model reakcije koja se ažurira</param>
         /// <returns></returns>
@@ -201,13 +219,12 @@ namespace ReactionsService.Controllers
         /// PUT 'http://localhost:44360/reactions' \
         ///{ \
         /// "reactionID": "23209e86-e2a5-4691-d1e2-08d8c11a2ff5", \
-        /// "productID": 2, \
-        /// "typeOfReactionID": 3,        
-        ///  "userID": 1 \
+        /// "productID": 4, \
+        /// "typeOfReactionID": 3       \
         ///  }
         /// </remarks>
         /// <response code="200">Vraća potvrdu da je uspešno izmenjena reakcija</response>
-        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="401">Greška pri autentifikaciji</response>
         /// <response code="404">Nije pronađena reakcija za ažuriranje</response>
         /// <response code="500">Greška na serveru prilikom modifikacije reakcije</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -264,11 +281,11 @@ namespace ReactionsService.Controllers
         /// Primer zahteva
         /// DELETE 'http://localhost:44360/reactions' \
         ///     --header 'CommunicationKey: Super super tezak kljuc' \
-        ///     --param  'reactionID = 23209e86-e2a5-4691-d1e7-08d8c11a2ff8'
+        ///     --param  'reactionID = 23209e86-e2a5-4691-d1e7-08d8c11a2ff7'
         /// </remarks>
         /// <returns>Status 204 (NoContent)</returns>
         /// <response code="204">Reakcija je uspešno obrisana</response>
-        /// <response code="401">Pogrešna autentifikacija</response>
+        /// <response code="401">Greška pri autentifikaciji</response>
         /// <response code="404">Nije pronađena reakcija za brisanje</response>
         /// <response code="500">Došlo je do greške na serveru prilikom brisanja reakcije</response>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
