@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace loggerMicroservice.Exceptions
 {
+    [Serializable]
     public class LogInsertException : Exception
     {
         public LogInsertException()
