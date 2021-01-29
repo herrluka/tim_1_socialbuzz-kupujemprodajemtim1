@@ -107,7 +107,7 @@ namespace ReactionsService.Controllers
             var sellerID = productMockRepository.GetProductByID(productID).SellerID;
 
             // korisnik ne moze videti reakcije proizvoda cije vlasnike je on blokirao ili su njega blokirali
-            if (reactionRepository.CheckDidIBlockedSeller(userID, sellerID) == true)
+            if (reactionRepository.CheckDidIBlockedSeller(userID, sellerID))
             {
                 return StatusCode(StatusCodes.Status400BadRequest, String.Format("You can not see products with sellerID {0} ", sellerID));
             }
@@ -180,7 +180,7 @@ namespace ReactionsService.Controllers
             var product = productMockRepository.GetProductByID(reaction.ProductID);
             var sellerID = product.SellerID;
 
-            if (reactionRepository.CheckDoIFollowSeller(userID, sellerID) == false)
+            if (!reactionRepository.CheckDoIFollowSeller(userID, sellerID))
             {
                 return StatusCode(StatusCodes.Status400BadRequest, String.Format("You are not following user with id {0} and you can not add reaction to his products", sellerID));
             }

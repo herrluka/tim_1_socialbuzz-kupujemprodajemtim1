@@ -18,22 +18,14 @@ namespace CommentingService.Data.FollowingMock
 
         private void FillData()
         {
-            FollowingList.AddRange(new List<FollowingDto>
-            {
-                new FollowingDto
-                {
-                    FollowingID = 1,
-                    FollowerID = 4,
-                    FollowedID = 1
 
-                },
-                new FollowingDto
-                {
-                    FollowingID = 2,
-                    FollowerID = 1,
-                    FollowedID = 6
-                }
-            });
+            FollowingDto f = new FollowingDto();
+            f.FollowingID = 1;
+            f.FollowerID = 4;
+            f.FollowedID = 1;
+
+            FollowingList.Add(f);
+        
 
         }
         public List<int> GetListOfFollowedUsers(int followerID)
@@ -64,12 +56,9 @@ namespace CommentingService.Data.FollowingMock
 
             foreach (var v in query)
             {
-                if (v.FollowerID == userID)
-                {
-                    if(v.FollowedID == sellerID)
-                    {
-                        return true;
-                    }
+                if (v.FollowerID == userID && v.FollowedID == sellerID)
+                { 
+                        return true;   
                 }
 
             }

@@ -28,18 +28,17 @@ namespace WebApplication1.Entities
         {
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("Database"));
         }
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            builder.Entity<Reactions>()
-                .HasData(new
-                {
-                   ReactionID = Guid.Parse("6a411c13-a195-48f7-8dbd-67596c3974c0"),
-                   ProductID = 2,
-                   TypeOfReactionID = 1,
-                   UserID = 3
+            modelBuilder.Entity<Reactions>()
+                 .HasData(new
+                 {
+                     ReactionID = Guid.Parse("6a411c13-a195-48f7-8dbd-67596c3974c0"),
+                     ProductID = 2,
+                     TypeOfReactionID = 1,
+                     UserID = 3
 
-             
-                });
+                 });
         }
     }
 }

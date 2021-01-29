@@ -36,7 +36,7 @@ namespace ReactionsService.Data
 
         public void UpdateTypeOfReaction(TypeOfReaction typeOfReaction)
         {
-            
+            //ova metoda se nece pozvati
         }
 
         public void DeleteTypeOfReaction(int typeOfReactionID)

@@ -306,17 +306,17 @@
             Dto model Black liste
              </summary>
         </member>
-        <member name="F:ReactionsService.Models.BlackListDto.BlackListID">
+        <member name="F:ReactionsService.Models.BlackListDto.blackListID">
             <summary>
             ID BlackListe
             </summary>
         </member>
-        <member name="F:ReactionsService.Models.BlackListDto.BlockerID">
+        <member name="F:ReactionsService.Models.BlackListDto.blockerID">
             <summary>
             ID korisnika koji je izvrsio blokiranje
             </summary>
         </member>
-        <member name="F:ReactionsService.Models.BlackListDto.BlockedID">
+        <member name="F:ReactionsService.Models.BlackListDto.blockedID">
             <summary>
             ID korisnika koji je blokiran od strane drugog korisnika
             </summary>
@@ -366,17 +366,17 @@
             Mock koji predstavlja model pracenja korisnika
             </summary>
         </member>
-        <member name="F:ReactionsService.Model.Mocks.FollowingDto.FollowingID">
+        <member name="F:ReactionsService.Model.Mocks.FollowingDto.followingID">
             <summary>
             ID Following-a
             </summary>
         </member>
-        <member name="F:ReactionsService.Model.Mocks.FollowingDto.FollowerID">
+        <member name="F:ReactionsService.Model.Mocks.FollowingDto.followerID">
             <summary>
             ID korisnika koji prati drugog korisnika(followed-a)
             </summary>
         </member>
-        <member name="F:ReactionsService.Model.Mocks.FollowingDto.FollowedID">
+        <member name="F:ReactionsService.Model.Mocks.FollowingDto.followedID">
             <summary>
             ID korisnika koji je zapracen od strane drugog korisnika (follower-a)
             </summary>

@@ -13,16 +13,32 @@ namespace ReactionsService.Model.Mocks
         /// <summary>
         /// ID Following-a
         /// </summary>
-        public int FollowingID;
+        private int followingID;
+
+        public int FollowingID
+        {
+            get { return followingID; }
+            set { followingID = value; }
+        }
 
         /// <summary>
         /// ID korisnika koji prati drugog korisnika(followed-a)
         /// </summary>
-        public int FollowerID;
+        private int followerID;
+        public int FollowerID
+        {
+            get { return followerID; }
+            set { followerID = value; }
+        }
 
         /// <summary>
         /// ID korisnika koji je zapracen od strane drugog korisnika (follower-a)
         /// </summary>
-        public int FollowedID;
+        private int followedID;
+        public int FollowedID
+        {
+            get { return followedID; }
+            set { followedID = value; }
+        }
     }
 }

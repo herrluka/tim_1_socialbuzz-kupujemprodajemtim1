@@ -18,37 +18,15 @@ namespace ReactionsService.Data
 
         private void FillData()
         {
-            BlackList.AddRange(new List<BlackListDto>
-            {
-                new BlackListDto
-                {
-                    BlackListID = Guid.Parse("CFD7FA84-8A27-4119-B6DB-5CFC1B0C94E1"),
-                    BlockerID = 4,
-                    BlockedID = 2
+            BlackListDto b = new BlackListDto();
+            b.BlackListID = Guid.Parse("CFD7FA84-8A27-4119-B6DB-5CFC1B0C94E1");
+            b.BlockerID = 4;
+            b.BlockedID = 2;
 
-                },
-                new BlackListDto
-                {
-                    BlackListID = Guid.Parse("CFD7FA84-8A27-4119-B6DB-5CFC1B0C94E2"),
-                    BlockerID = 5,
-                    BlockedID = 6
-                },
-                   new BlackListDto
-                {
-                    BlackListID = Guid.Parse("CFD7FA84-3A27-4119-B6DB-5CFC1B0C94E2"),
-                    BlockerID = 6,
-                    BlockedID = 3
-                },
-                 new BlackListDto
-                {
-                    BlackListID = Guid.Parse("CFD7FA84-8A27-4119-B6DB-5CFC1B0C94E3"),
-                    BlockerID = 7,
-                    BlockedID = 3
-                }
-            });
+            BlackList.Add(b);
 
         }
-        public List<int> GetListOfBlockedUsers(int UserID)
+        public List<int> GetListOfBlockedUsers(int userID)
         {
             List<int> usersID = new List<int>();
 
@@ -57,11 +35,11 @@ namespace ReactionsService.Data
 
             foreach (var v in query)
             {
-               if(v.BlockedID == UserID)
+               if(v.BlockedID == userID)
                 {
                     usersID.Add(v.BlockerID);
                 }
-               else if(v.BlockerID == UserID)
+               else if(v.BlockerID == userID)
                 {
                     usersID.Add(v.BlockedID);
                 }
@@ -78,19 +56,17 @@ namespace ReactionsService.Data
 
             foreach (var v in query)
             {
-                if (v.BlockedID == userID)
+                if (v.BlockedID == userID && v.BlockerID == sellerID)
                 {
-                    if (v.BlockerID == sellerID)
-                    {
+                   
                         return true;
-                    }
+                    
                 }
-                else if (v.BlockerID == userID)
+                else if (v.BlockerID == userID && v.BlockedID == sellerID)
                 {
-                    if (v.BlockedID == sellerID)
-                    {
+                   
                         return true;
-                    }
+                    
                 }
             }
 

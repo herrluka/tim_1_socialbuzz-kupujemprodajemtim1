@@ -187,17 +187,17 @@
             Mock koji predstavlja model pracenja korisnika
             </summary>
         </member>
-        <member name="F:CommentingService.Model.Mocks.FollowingDto.FollowingID">
+        <member name="F:CommentingService.Model.Mocks.FollowingDto.followingID">
             <summary>
             ID Following-a
             </summary>
         </member>
-        <member name="F:CommentingService.Model.Mocks.FollowingDto.FollowerID">
+        <member name="F:CommentingService.Model.Mocks.FollowingDto.followerID">
             <summary>
             ID korisnika koji prati drugog korisnika(followed-a)
             </summary>
         </member>
-        <member name="F:CommentingService.Model.Mocks.FollowingDto.FollowedID">
+        <member name="F:CommentingService.Model.Mocks.FollowingDto.followedID">
             <summary>
             ID korisnika koji je zapracen od strane drugog korisnika (follower-a)
             </summary>
@@ -227,17 +227,17 @@
             Dto model Black liste
              </summary>
         </member>
-        <member name="F:CommentingService.Models.BlackListDto.BlackListID">
+        <member name="F:CommentingService.Models.BlackListDto.blackListID">
             <summary>
             ID BlackListe
             </summary>
         </member>
-        <member name="F:CommentingService.Models.BlackListDto.BlockerID">
+        <member name="F:CommentingService.Models.BlackListDto.blockerID">
             <summary>
             ID korisnika koji je izvrsio blokiranje
             </summary>
         </member>
-        <member name="F:CommentingService.Models.BlackListDto.BlockedID">
+        <member name="F:CommentingService.Models.BlackListDto.blockedID">
             <summary>
             ID korisnika koji je blokiran od strane drugog korisnika
             </summary>

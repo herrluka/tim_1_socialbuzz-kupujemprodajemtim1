@@ -23,9 +23,9 @@ namespace CommentingService.Entities
         {
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("Database"));
         }
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+           //this is empty method
         }
     
 }

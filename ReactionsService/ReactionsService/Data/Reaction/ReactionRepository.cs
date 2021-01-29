@@ -42,7 +42,6 @@ namespace WebApplication1.Data
 
             return query.ToList();
 
-            //return context.Reactions.FromSqlRaw("select * from Reactions where productID = {0}", productID).ToList();
 
         }
 
@@ -52,9 +51,9 @@ namespace WebApplication1.Data
             return followingRepository.DoIFolloweSeler(userID, sellerID);
         }
 
-        public bool CheckDidIBlockedSeller(int userID, int sellerID)
+        public bool CheckDidIBlockedSeller(int userId, int sellerID)
         {
-            return blackListRepository.DidIBlockedSeler(userID, sellerID);
+            return blackListRepository.DidIBlockedSeler(userId, sellerID);
         }
 
         public Reactions GetReactionByID(Guid reactionID)
@@ -71,7 +70,7 @@ namespace WebApplication1.Data
 
         public void UpdateReaction(Reactions reaction)
         {
-
+            //ova metoda se nece pozvati
         }
 
         public void DeleteReaction(Guid reactionID)

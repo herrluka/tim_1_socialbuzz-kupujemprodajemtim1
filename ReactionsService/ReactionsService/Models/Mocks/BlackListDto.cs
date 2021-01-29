@@ -13,16 +13,33 @@ namespace ReactionsService.Models
         /// <summary>
         /// ID BlackListe
         /// </summary>
-        public Guid BlackListID;
+        private Guid blackListID;
+
+        public Guid BlackListID
+        {
+            get { return blackListID; }
+            set { blackListID = value; }
+        }
+
 
         /// <summary>
         /// ID korisnika koji je izvrsio blokiranje
         /// </summary>
-        public int BlockerID;
+        private int blockerID;
+        public int BlockerID
+        {
+            get { return blockerID; }
+            set { blockerID = value; }
+        }
 
         /// <summary>
         /// ID korisnika koji je blokiran od strane drugog korisnika
         /// </summary>
-        public int BlockedID;
+        private int blockedID;
+        public int BlockedID
+        {
+            get { return blockedID; }
+            set { blockedID = value; }
+        }
     }
 }

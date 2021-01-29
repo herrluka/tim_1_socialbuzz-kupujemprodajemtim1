@@ -100,7 +100,7 @@ namespace ReactionsService
 
             app.UseSwaggerUI(setupAction => {
                 setupAction.SwaggerEndpoint("/swagger/ReactionsOpenApiSpecification/swagger.json", "Reactions API");
-              //  setupAction.RoutePrefix = "";
+             
             });
 
             app.UseMiddleware<CommunicationKeyAuthMiddleware>();

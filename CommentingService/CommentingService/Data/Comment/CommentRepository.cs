@@ -61,6 +61,7 @@ namespace CommentingService.Data.Comment
 
         public void UpdateComment(Comments comment)
         {
+            //ovo se nikada nece pozvati jer vrsim mapiranje
         }
 
         public bool CheckDoIFollowSeller(int userID, int sellerID)
@@ -68,9 +69,9 @@ namespace CommentingService.Data.Comment
             return followingRepository.DoIFolloweSeler(userID, sellerID);
         }
 
-        public bool CheckDidIBlockedSeller(int userID, int sellerID)
+        public bool CheckDidIBlockedSeller(int userId, int sellerID)
         {
-            return blackListMockRepository.DidIBlockedSeler(userID, sellerID);
+            return blackListMockRepository.DidIBlockedSeler(userId, sellerID);
         }
 
     }

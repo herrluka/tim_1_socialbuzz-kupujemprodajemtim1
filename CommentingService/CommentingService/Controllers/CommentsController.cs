@@ -105,7 +105,7 @@ namespace CommentingService.Controllers
 
 
             /// korisnik ne moze videti komentare proizvoda cije vlasnike je on blokirao ili su njega blokirali
-            if (commentRepository.CheckDidIBlockedSeller(userID, sellerID) == true)
+            if (commentRepository.CheckDidIBlockedSeller(userID, sellerID))
             {
                 return StatusCode(StatusCodes.Status400BadRequest, String.Format("You can not see products with sellerID {0} ", sellerID));
             }
@@ -166,7 +166,7 @@ namespace CommentingService.Controllers
             var product = productRepository.GetProductByID(comment.ProductID);
             var sellerID = product.SellerID;
 
-            if (commentRepository.CheckDoIFollowSeller(userID, sellerID) == false)
+            if (!commentRepository.CheckDoIFollowSeller(userID, sellerID))
             {
                 return StatusCode(StatusCodes.Status400BadRequest, String.Format("You are not following user with id {0} and you can not comment his products", sellerID));
             }
