@@ -1,0 +1,306 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CommentingService</name>
+    </assembly>
+    <members>
+        <member name="T:CommentingService.Controllers.CommentsController">
+            <summary>
+            Kontroler koji izvrsava CRUD operacije nad tabelom Comment
+            </summary>
+        </member>
+        <member name="M:CommentingService.Controllers.CommentsController.GetAllComments(System.String)">
+            <summary>
+            Vraća kreirane komentare    
+            </summary>
+            <returns></returns>
+            <remarks>
+            Primer zahteva
+            GET 'https://localhost:44328/comments' \
+                --header 'CommunicationKey: Super super tezak kljuc'
+            </remarks>
+            <response code="200">Vraća listu komentara</response>
+            <response code="404">Nisu pronađeni komenari</response>
+            <response code="401">Greška pri autentifikaciji</response>
+        </member>
+        <member name="M:CommentingService.Controllers.CommentsController.GetCommentsByProductID(System.String,System.Int32,System.Int32)">
+            <summary>
+            Vraća komentare dodeljene specificiranom proizvodu 
+            </summary>
+            <returns></returns>
+            <remarks>
+            GET 'https://localhost:44328/comments/byProductID' \
+             Primer zahteva koji prolazi \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'productID = 1' \
+                --param  'userID = 4' \
+            Primer zahteva koji ne prolazi jer je korisnik sa ID-jem 4 blokirao korisnika sa ID-jem 2, koji je vlasnik proizvoda sa ID-jem 2, i ne može videti njegove proizvode \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'productID = 2' \
+                --param  'userID = 4'
+            </remarks>
+            <param name="productID">ID proizvoda</param>
+            <param name="userID">ID korisnika koji šalje zahtev</param>
+            <response code="200">Vraća listu komentara za specificirani proizvod</response>
+            <response code="400">Loše kreiran zahtev</response>
+            <response code="401">Greška pri autentifikaciji</response>
+            <response code="404">Nije pronađen komenar sa zadatim ID-jem proizvoda</response>
+        </member>
+        <member name="M:CommentingService.Controllers.CommentsController.AddComment(System.String,CommentingService.Model.CreateDTO.CommentCreateDto,System.Int32)">
+            <summary>
+            Kreira novi komenar
+            </summary>
+            <param name="commentDto">Model komenara koji se dodaje</param>
+            <param name="userID">ID korisnika koji pokreće zahtev</param>
+            <returns></returns>
+            <remarks>
+            POST 'https://localhost:44328/comments/' \
+            Primer zahteva za kreiranje novog komentara koji prolazi \
+             --header 'CommunicationKey: Super super tezak kljuc' \
+             --param 'userID = 4' \
+            {     \
+             "productID": 1, \
+             "content": "New comment" \
+            } \
+             Primer zahteva za kreiranje novog komentara koji ne prolazi jer korisnik sa ID-jem 4 ne prati korisnika sa ID-jem 3, koji je vlasnik proizvoda sa ID-jem 3, i ne može komentarisati njegove proizvode \
+             --header 'CommunicationKey: Super super tezak kljuc' \
+             --param 'userID = 4' \
+            {     \
+             "productID": 3, \
+             "content": "New comment" \
+            }
+            </remarks>
+            <response code="201">Vraća potvrdu da je kreiran novi komentar</response>
+            <response code="400">Loše kreiran zahtev</response>
+            <response code="401">Greška pri autentifikaciji</response>
+            <response code="500">Greška na serveru prilikom čuvanja komentara.</response>
+        </member>
+        <member name="M:CommentingService.Controllers.CommentsController.UpdateComment(System.String,CommentingService.Model.UpdateDTO.CommentUpdateDto)">
+             <summary>
+             Vrši izmenu jednog komentara na osnovu ID-ja komentara
+             </summary>
+             <param name="comment">Model komentara koji se ažurira</param>
+             <returns></returns>
+             <remarks>
+             PUT 'https://localhost:44328/comments' \
+             Primer zahteva za modifikaciju komentara    \
+              --header 'CommunicationKey: Super super tezak kljuc'  \
+            { \
+             "commentID": "23209e86-e2a5-4691-d1e7-48d8c11a2ff5", \
+             "productID": 3, \
+              "content": "Updated!" \
+              } 
+             </remarks>
+             <response code="200">Vraća potvrdu da je uspešno izmenjen komentar</response>
+             <response code="401">Greška pri autentifikaciji</response>
+             <response code="404">Nije pronađen komentar za ažuriranje</response>
+             <response code="500">Greška na serveru prilikom modifikacije komentara</response>
+        </member>
+        <member name="M:CommentingService.Controllers.CommentsController.DeleteComment(System.String,System.Guid)">
+            <summary>
+            Vrši brisanje jednog komentara na osnovu ID-ja komentara
+            </summary>
+            <param name="commentID">ID komentara koji se briše</param>
+            <remarks>        
+            Primer zahteva
+            DELETE 'https://localhost:44328/comments' \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'commentID = 734E8DC9-5D60-45A8-6739-08D8C3A8AEC3'
+            </remarks>
+            <response code="204">Komentar je uspešno obrisan</response>
+            <response code="401">Greška pri autentifikaciji</response>
+            <response code="404">Nije pronađen komentar za brisanje</response>
+            <response code="500">Došlo je do greške na serveru prilikom brisanja komentara</response>
+        </member>
+        <member name="T:CommentingService.Model.Comments">
+            <summary>
+            Predstavlja model komenatara koji se dodaje na objavu
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.Comments.ProductID">
+            <summary>
+            Id proizvoda na koji je dodat komentar
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.Comments.UserID">
+            <summary>
+            Id korisnika koji je dodao komentar
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.Comments.Content">
+            <summary>
+            Sadrzaj datog komentara
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.Comments.CommentDate">
+            <summary>
+            Datum kada je dodat dati komentar
+            </summary>
+        </member>
+        <member name="T:CommentingService.Model.CreateDTO.CommentCreateDto">
+            <summary>
+            Dto za kreiranje komentara
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.CreateDTO.CommentCreateDto.ProductID">
+            <summary>
+            Id proizvoda na koji je dodat komentar
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.CreateDTO.CommentCreateDto.Content">
+            <summary>
+            Sadrzaj datog komentara
+            </summary>
+        </member>
+        <member name="T:CommentingService.Model.CommentsDto">
+            <summary>
+            Dto za model komentara koji se dodaje na objavu 
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.CommentsDto.CommentID">
+            <summary>
+            Id komentara
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.CommentsDto.ProductID">
+            <summary>
+            Id proizvoda na koji je dodat komentar
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.CommentsDto.UserID">
+            <summary>
+            Id korisnika koji je dodao komentar
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.CommentsDto.Content">
+            <summary>
+            Sadrzaj datog komentara
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.CommentsDto.CommentDate">
+            <summary>
+            Datum kada je dodat dati komentar
+            </summary>
+        </member>
+        <member name="T:CommentingService.Model.Mocks.FollowingDto">
+            <summary>
+            Mock koji predstavlja model pracenja korisnika
+            </summary>
+        </member>
+        <member name="F:CommentingService.Model.Mocks.FollowingDto.followingID">
+            <summary>
+            ID Following-a
+            </summary>
+        </member>
+        <member name="F:CommentingService.Model.Mocks.FollowingDto.followerID">
+            <summary>
+            ID korisnika koji prati drugog korisnika(followed-a)
+            </summary>
+        </member>
+        <member name="F:CommentingService.Model.Mocks.FollowingDto.followedID">
+            <summary>
+            ID korisnika koji je zapracen od strane drugog korisnika (follower-a)
+            </summary>
+        </member>
+        <member name="T:CommentingService.Model.UpdateDTO.CommentUpdateDto">
+            <summary>
+            Dto za modifikovanje komenatara
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.UpdateDTO.CommentUpdateDto.CommentID">
+            <summary>
+            Id komentara
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.UpdateDTO.CommentUpdateDto.ProductID">
+            <summary>
+            Id proizvoda na koji je dodat komentar
+            </summary>
+        </member>
+        <member name="P:CommentingService.Model.UpdateDTO.CommentUpdateDto.Content">
+            <summary>
+            Sadrzaj datog komentara
+            </summary>
+        </member>
+        <member name="T:CommentingService.Models.BlackListDto">
+             <summary>
+            Dto model Black liste
+             </summary>
+        </member>
+        <member name="F:CommentingService.Models.BlackListDto.blackListID">
+            <summary>
+            ID BlackListe
+            </summary>
+        </member>
+        <member name="F:CommentingService.Models.BlackListDto.blockerID">
+            <summary>
+            ID korisnika koji je izvrsio blokiranje
+            </summary>
+        </member>
+        <member name="F:CommentingService.Models.BlackListDto.blockedID">
+            <summary>
+            ID korisnika koji je blokiran od strane drugog korisnika
+            </summary>
+        </member>
+        <member name="T:CommentingService.Models.ProductDto">
+            <summary>
+            Predstavlja model proizvoda
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.ProductID">
+            <summary>
+            Id proizvoda
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.ProductName">
+            <summary>
+            Naziv proizvoda
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.SellerID">
+            <summary>
+            Id korisnika koji je prodavac datog proizvoda
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.Description">
+            <summary>
+            Opis datog proizvoda
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.Weight">
+             <summary>
+            Tezina proizvoda 
+             </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.PriceID">
+            <summary>
+            Id cene proizvoda
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.CurrencyID">
+            <summary>
+            Id valute u kojoj je cena izrazena
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.ProductConditionID">
+            <summary>
+            Id stanja proizovda
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.CategoryID">
+            <summary>
+            Id kategorije kojoj proizvod pripada
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.Quantity">
+            <summary>
+            Kolicina u kojoj se proizvod prodaje
+            </summary>
+        </member>
+        <member name="P:CommentingService.Models.ProductDto.PublicationDate">
+            <summary>
+            Datum objavljivanja proizvoda
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "84a5de61-e0f6-470b-95b1-4b4711473e8a",
+		"name": "loggerMicroservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateLog200",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "LogLevel",
+							"value": "Information",
+							"type": "text"
+						},
+						{
+							"key": "EventID",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "RequestID",
+							"value": "H52s0299503",
+							"type": "text"
+						},
+						{
+							"key": "PreviousRequestID",
+							"value": "No previous request ID",
+							"type": "text"
+						},
+						{
+							"key": "Message",
+							"value": "Testiram samo post za logove",
+							"type": "text"
+						},
+						{
+							"key": "ExceptionType",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "ExceptionMessage",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "TimeOfAction",
+							"value": "01/01/2021 5:28:29 PM",
+							"type": "text"
+						},
+						{
+							"key": "Microservice",
+							"value": "testingMicroservice",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:5003/api/log/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"api",
+						"log",
+						""
+					]
+				},
+				"description": "Uspesan upis novog loga"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateLog400",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://localhost:5003/api/log/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"api",
+						"log",
+						""
+					]
+				},
+				"description": "Greska pri kreiranju log-a"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateLog401",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "https://localhost:5003/api/log/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"api",
+						"log",
+						""
+					]
+				},
+				"description": "Greska pri kreiranju log-a"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogsByParams",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5003/api/log?microservice=loggerMicroservice&logLevel=Warning&from=17-Jan-21%2011%3A41%3A10%20PM&to=20-Jan-21%2011%3A41%3A10%20PM",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"api",
+						"log"
+					],
+					"query": [
+						{
+							"key": "microservice",
+							"value": "loggerMicroservice"
+						},
+						{
+							"key": "logLevel",
+							"value": "Warning"
+						},
+						{
+							"key": "from",
+							"value": "17-Jan-21%2011%3A41%3A10%20PM"
+						},
+						{
+							"key": "to",
+							"value": "20-Jan-21%2011%3A41%3A10%20PM"
+						}
+					]
+				},
+				"description": "Vraca logove po zadatoj pocetnjem datumu krajnjem datumu nazivu servisa iz kojeg je logovano i tipu loga"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogsByParams204",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5003/api/log?microservice=badMicroserviceName",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"api",
+						"log"
+					],
+					"query": [
+						{
+							"key": "microservice",
+							"value": "badMicroserviceName"
+						}
+					]
+				},
+				"description": "Vraca logove po zadatoj pocetnjem datumu krajnjem datumu nazivu servisa iz kojeg je logovano i tipu loga"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogsByParams401",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5003/api/log?microservice=loggerMicroservice&logLevel=Warning&from=17-Jan-21%2011%3A41%3A10%20PM&to=20-Jan-21%2011%3A41%3A10%20PM",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"api",
+						"log"
+					],
+					"query": [
+						{
+							"key": "microservice",
+							"value": "loggerMicroservice"
+						},
+						{
+							"key": "logLevel",
+							"value": "Warning"
+						},
+						{
+							"key": "from",
+							"value": "17-Jan-21%2011%3A41%3A10%20PM"
+						},
+						{
+							"key": "to",
+							"value": "20-Jan-21%2011%3A41%3A10%20PM"
+						}
+					]
+				},
+				"description": "Vraca logove po zadatoj pocetnjem datumu krajnjem datumu nazivu servisa iz kojeg je logovano i tipu loga"
+			},
+			"response": []
+		},
+		{
+			"name": "GetLogs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"value": "Super super tezak kljuc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://localhost:5003/api/log/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5003",
+					"path": [
+						"api",
+						"log",
+						""
+					]
+				},
+				"description": "Vraca sve logove"
+			},
+			"response": []
+		}
+	]
+}

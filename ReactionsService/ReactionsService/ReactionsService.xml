@@ -1,0 +1,470 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ReactionsService</name>
+    </assembly>
+    <members>
+        <member name="T:ReactionsService.Controllers.ReactionsController">
+            <summary>
+            Kontroler koji izvršava CRUD operacije nad Reactions tabelom
+            </summary>
+        </member>
+        <member name="M:ReactionsService.Controllers.ReactionsController.GetAllReactions(System.String)">
+            <summary>
+            Vraća kreirane reakcije
+            </summary>
+            <returns></returns>
+            <remarks>
+            Primer zahteva
+            GET 'http://localhost:44360/reactions/' \
+                --header 'CommunicationKey: Super super tezak kljuc'
+            </remarks>
+            <response code="200">Vraća listu reakcija</response>
+            <response code="404">Nisu pronađene reakcije</response>
+            <response code="401">Greška pri autentifikaciji</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.ReactionsController.GetReactionsByProductID(System.String,System.Int32,System.Int32)">
+            <summary>
+            Vraća reakcije dodeljene specificiranom proizvodu
+            </summary>
+            <returns></returns>
+            <remarks>
+            GET 'http://localhost:44360/reactions/byProductID' \
+            Primer zahteva koji prolazi \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'productID = 1' \
+                --param  'userID = 4' \
+            Primer zahteva koji ne prolazi jer je korisnik sa ID-jem 4 blokirao korisnika sa ID-jem 2, koji je vlasnik proizvoda sa ID-jem 2, i ne može videti njegove proizvode \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'productID = 2' \
+                --param  'userID = 4 
+            </remarks>
+            <param name="productID">ID proizvoda</param>
+            <param name="userID">ID korisnika koji šalje zahtev</param>
+            <response code="200">Vraća listu reakcija za specificirani proizvod</response>
+            <response code="400">Loše kreiran zahtev</response>
+            <response code="401">Greška pri autentifikaciji</response>
+            <response code="404">Nije pronađena reakcija sa zadatim ID-jem reakcije</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.ReactionsController.AddReactionToProduct(System.String,ReactionsService.Models.ReactionCreateDto,System.Int32)">
+            <summary>
+            Kreira novu reakciju
+            </summary>
+            <param name="reaction">Model reakcije koji se dodaje</param>
+            <param name="userID">ID korisnika koji pokreće zahtev</param>
+            <returns></returns>
+            <remarks>
+            POST 'http://localhost:44360/reactions/' \
+            Primer zahteva za kreiranje nove reakcije koji prolazi \
+             --header 'CommunicationKey: Super super tezak kljuc' \
+             --param 'userID = 4' \
+            {     \
+             "productID": 1, \
+             "typeOfReactionID": 3 \
+            } \
+            Primer zahteva za kreiranje nove reakcije koji ne prolazi (ukoliko je prethodni zahtev izvršen), jer korisnik ne može dodati više od jedne reakcije na jedan proizvod \
+             --header 'CommunicationKey: Super super tezak kljuc' \
+             --param 'userID = 4' \
+            {     \
+             "productID": 1, \
+             "typeOfReactionID": 2 \
+            }  \
+             Primer zahteva za kreiranje novog komentara koji ne prolazi jer korisnik sa ID-jem 4 ne prati korisnika sa ID-jem 3, koji je vlasnik proizvoda sa ID-jem 3, i ne može dodavati reakcije na njegove proizvode \
+             --header 'CommunicationKey: Super super tezak kljuc' \
+             --param 'userID = 4' \
+            {     \
+             "productID": 3, \
+             "typeOfReactionID": 3 \
+            } 
+            </remarks>
+            <response code="201">Vraća potvrdu da je kreirana nova reakcija</response>
+            <response code="400">Loše kreiran zahtev</response>
+            <response code="401">Pogrešna autentifikacija</response>
+            <response code="500">Greška na serveru prilikom čuvanja reakcije.</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.ReactionsController.UpdateReaction(System.String,ReactionsService.Models.ReactionUpdateDto)">
+             <summary>
+             Vrši izmenu jedne reakcije na osnovu ID-ja reakcije.
+             </summary>
+             <param name="reaction">Model reakcije koja se ažurira</param>
+             <returns></returns>
+             <remarks>
+             Primer zahteva za modifikaciju reakcije  \
+              --header 'CommunicationKey: Super super tezak kljuc'  \
+             PUT 'http://localhost:44360/reactions' \
+            { \
+             "reactionID": "23209e86-e2a5-4691-d1e2-08d8c11a2ff5", \
+             "productID": 4, \
+             "typeOfReactionID": 3       \
+              }
+             </remarks>
+             <response code="200">Vraća potvrdu da je uspešno izmenjena reakcija</response>
+             <response code="401">Greška pri autentifikaciji</response>
+             <response code="404">Nije pronađena reakcija za ažuriranje</response>
+             <response code="500">Greška na serveru prilikom modifikacije reakcije</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.ReactionsController.DeleteReacion(System.String,System.Guid)">
+            <summary>
+            Vrši brisanje jedne reakcije na osnovu ID-ja reakcije.
+            </summary>
+            <param name="reactionID">ID reakcije koja se briše</param>
+            <remarks>        
+            Primer zahteva
+            DELETE 'http://localhost:44360/reactions' \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'reactionID = 23209e86-e2a5-4691-d1e7-08d8c11a2ff7'
+            </remarks>
+            <returns>Status 204 (NoContent)</returns>
+            <response code="204">Reakcija je uspešno obrisana</response>
+            <response code="401">Greška pri autentifikaciji</response>
+            <response code="404">Nije pronađena reakcija za brisanje</response>
+            <response code="500">Došlo je do greške na serveru prilikom brisanja reakcije</response>
+        </member>
+        <member name="T:ReactionsService.Controllers.TypeOfReactionController">
+            <summary>
+            Kontroler koji izvesava CRUD operacij nad tabelom Tip reakcije
+            </summary>
+        </member>
+        <member name="M:ReactionsService.Controllers.TypeOfReactionController.GetAllTypesOfReaction(System.String)">
+            <summary>
+            Vraca kreirane tipove reakcija
+            </summary>
+            <returns></returns>
+            <remarks>
+            Primer zahteva
+            GET 'http://localhost:44360/typeOfReaction/' \
+                --header 'CommunicationKey: Super super tezak kljuc' 
+            </remarks>
+            <response code="200">Vraća listu tipova reakcija</response>
+            <response code="401">Greška pri autentifikaciji</response>
+            <response code="404">Nisu pronađeni tipovi reakcija</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.TypeOfReactionController.GetTypeOfReactionByID(System.String,System.Int32)">
+            <summary>
+            Vraća tip reakcije na osnovu ID-ja tipa reakcija
+            </summary>
+            <returns></returns>
+            <remarks>
+            Primer zahteva
+            GET 'https://localhost:44360/typeOfReaction/byID' \
+                --header 'CommunicationKey: Super super tezak kljuc'  \
+                --param  'typeOfReactionID = 1'  
+            </remarks>
+            <param name="typeOfReactionID">ID tipa reakacije</param>
+            <response code="200">Vraća tip rekacije</response>
+            <response code="404">Nije pronađen tip reakcije sad prosleđenim ID-jem tipa reakcije</response>
+            <response code="401">Pogrešna autentifikacija</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.TypeOfReactionController.AddTypeOfReaction(System.String,ReactionsService.Models.TypeOfReactionCreateDto)">
+            <summary>
+            Kreira novi tip reakcije
+            </summary>
+            <param name="typeOfReaction">Model tipa reakcije</param>
+            <param name="key"> CommunicationKey</param>
+            <remarks>
+            Primer zahteva za kreiranje novog tipa reakcije \
+              --header 'CommunicationKey: Super super tezak kljuc' \
+            POST https://localhost:44360/typeOfReaction \
+            {   \
+             "reactionName": "Insert", \
+             "url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Smiley.svg" \
+            }
+            </remarks>
+            <response code="201">Vraća potvrdu da je uspešno kreiran novi tip reakcije</response>
+            <response code="401">Pogrešna autentifikacija</response>
+            <response code="500">Došlo je do greške na serveru prilikom kreiranja tipa reakcije</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.TypeOfReactionController.UpdateTypeOfReaction(System.String,ReactionsService.Models.TypeOfReactionUpdateDto)">
+             <summary>
+             Vrši izmenu jednog tipa rekacije na osnovu ID-ja tipa reakcije
+             </summary>
+             <param name="typeOfReaction">Model tipa reakcije koji se ažurira</param>
+             <remarks>
+             Primer zahteva za modifikovanje tipa reakcije \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+             PUT  https://localhost:44360/typeOfReaction \
+             { \
+             "typeOfReactionID": 8, \
+             "reactionName": "Big heart", \
+             "url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Smiley.svg" \
+            }
+             </remarks>
+             <response code="200">Vraća potvrdu da je uspešno ažuriran tip reakcije</response>
+             <response code="404">Tip reakcije koji se ažurira nije pronađen</response>
+             <response code="401">Greška pri autentifikaciji</response>
+             <response code="500">Došlo je do greške na serveru prilikom ažuriranja tipa reakcije</response>
+        </member>
+        <member name="M:ReactionsService.Controllers.TypeOfReactionController.DeleteTypeOfReaction(System.String,System.Int32)">
+            <summary>
+            Vrši brisanje jednog tipa reakcije na osnovu ID-ja tipa reakcije.
+            </summary>
+            <param name="typeOfReactionID">ID tipa reakcije koji se briše</param>
+            <remarks>        
+            Primer zahteva
+            DELETE 'https://localhost:44360/typeOfReaction/' \
+                --header 'CommunicationKey: Super super tezak kljuc' \
+                --param  'typeOfReactionID = 14'
+            </remarks>
+            <response code="204">Tip reakcije je uspešno obrisan</response>
+            <response code="401">Greška pri autentifikaciji</response>
+            <response code="404">Nije pronađen tip reakcije za brisanje</response>
+            <response code="500">Došlo je do greške na serveru prilikom brisanja tipa reakcije</response>
+        </member>
+        <member name="T:ReactionsService.Models.TypeOfReaction">
+            <summary>
+            Predstavlja model tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReaction.TypeOfReactionID">
+            <summary>
+            Id tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReaction.ReactionName">
+            <summary>
+            Naziv tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReaction.Url">
+            <summary>
+            Url do datog tipa reakcije
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Models.ReactionCreateDto">
+            <summary>
+            DTO za kreiranje Reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionCreateDto.ProductID">
+            <summary>
+            Id proizvoda na koji je dodata reakcija
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionCreateDto.TypeOfReactionID">
+            <summary>
+            Id tipa reakcije
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:ReactionsService.Models.TypeOfReactionCreateDto" -->
+        <member name="P:ReactionsService.Models.TypeOfReactionCreateDto.ReactionName">
+            <summary>
+            Naziv tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReactionCreateDto.Url">
+            <summary>
+            Url do datog tipa reakcije
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Models.ReactionsDto">
+            <summary>
+            DTO reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionsDto.ReactionID">
+            <summary>
+            Id reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionsDto.ProductID">
+            <summary>
+            Id proizvoda na koji je dodata reakcija
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionsDto.TypeOfReactionID">
+            <summary>
+            Id tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionsDto.UserID">
+            <summary>
+            Id usera koji je dodao reakciju
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Models.TypeOfReactionDto">
+            <summary>
+            DTO za tip reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReactionDto.TypeOfReactionID">
+            <summary>
+            Id tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReactionDto.ReactionName">
+            <summary>
+            Naziv tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReactionDto.Url">
+            <summary>
+            Url do datog tipa reakcije
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Models.BlackListDto">
+             <summary>
+            Dto model Black liste
+             </summary>
+        </member>
+        <member name="F:ReactionsService.Models.BlackListDto.blackListID">
+            <summary>
+            ID BlackListe
+            </summary>
+        </member>
+        <member name="F:ReactionsService.Models.BlackListDto.blockerID">
+            <summary>
+            ID korisnika koji je izvrsio blokiranje
+            </summary>
+        </member>
+        <member name="F:ReactionsService.Models.BlackListDto.blockedID">
+            <summary>
+            ID korisnika koji je blokiran od strane drugog korisnika
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Models.ReactionUpdateDto">
+            <summary>
+            Dto za update Reaction-a
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionUpdateDto.ReactionID">
+            <summary>
+            Id reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionUpdateDto.ProductID">
+            <summary>
+            Id proizvoda na koji je dodata reakcija
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.ReactionUpdateDto.TypeOfReactionID">
+            <summary>
+            Id tipa reakcije
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Models.TypeOfReactionUpdateDto">
+            <summary>
+            Dto za update tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReactionUpdateDto.TypeOfReactionID">
+            <summary>
+            ID tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReactionUpdateDto.ReactionName">
+            <summary>
+            Naziv tipa reakcije
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Models.TypeOfReactionUpdateDto.Url">
+            <summary>
+            Url do datog tipa reakcije
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Model.Mocks.FollowingDto">
+            <summary>
+            Mock koji predstavlja model pracenja korisnika
+            </summary>
+        </member>
+        <member name="F:ReactionsService.Model.Mocks.FollowingDto.followingID">
+            <summary>
+            ID Following-a
+            </summary>
+        </member>
+        <member name="F:ReactionsService.Model.Mocks.FollowingDto.followerID">
+            <summary>
+            ID korisnika koji prati drugog korisnika(followed-a)
+            </summary>
+        </member>
+        <member name="F:ReactionsService.Model.Mocks.FollowingDto.followedID">
+            <summary>
+            ID korisnika koji je zapracen od strane drugog korisnika (follower-a)
+            </summary>
+        </member>
+        <member name="T:ReactionsService.Entities.ProductDto">
+            <summary>
+            Predstavlja model proizvoda
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.ProductID">
+            <summary>
+            Id proizvoda
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.ProductName">
+            <summary>
+            Naziv proizvoda
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.SellerID">
+            <summary>
+            Id korisnika koji je prodavac datog proizvoda
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.Description">
+            <summary>
+            Opis datog proizvoda
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.Weight">
+             <summary>
+            Tezina proizvoda 
+             </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.PriceID">
+            <summary>
+            Id cene proizvoda
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.CurrencyID">
+            <summary>
+            Id valute u kojoj je cena izrazena
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.ProductConditionID">
+            <summary>
+            Id stanja proizovda
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.CategoryID">
+            <summary>
+            Id kategorije kojoj proizvod pripada
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.Quantity">
+            <summary>
+            Kolicina u kojoj se proizvod prodaje
+            </summary>
+        </member>
+        <member name="P:ReactionsService.Entities.ProductDto.PublicationDate">
+            <summary>
+            Datum objavljivanja proizvoda
+            </summary>
+        </member>
+        <member name="T:WebApplication1.Models.Reactions">
+            <summary>
+            Predstavlja model reakcije na objavu
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Models.Reactions.ReactionID">
+            <summary>
+            Id reakcije
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Models.Reactions.ProductID">
+            <summary>
+            Id proizvoda na koji je dodata reakcija
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Models.Reactions.TypeOfReactionID">
+            <summary>
+            Id tipa reakcije
+            </summary>
+        </member>
+        <member name="P:WebApplication1.Models.Reactions.UserID">
+            <summary>
+            Id usera koji je dodao reakciju
+            </summary>
+        </member>
+    </members>
+</doc>
