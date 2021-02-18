@@ -59,6 +59,11 @@ namespace Transport_Service.Controllers
         [HttpPost]
         public IActionResult CreateNewTransport([FromBody] TransportBodyDto bodyTransport)
         {
+            if (bodyTransport.MinimalWeight >= bodyTransport.MaximalWeight)
+            {
+                return new BadRequestObjectResult(new { status = "Minimal weight cannot be greater or equal with minimal weight", content = (string)null });
+            }
+
             var transportType = transportTypeRepository.GetTransportTypeById(bodyTransport.TransportTypeId);
             if (transportType == null)
             {
