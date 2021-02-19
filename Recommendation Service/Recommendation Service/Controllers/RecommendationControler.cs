@@ -68,7 +68,7 @@ namespace Recommendation_Service.Controllers
                 return new NotFoundObjectResult(new { status = "Bad category id sent", content = (string)null });
             }
 
-            var products = await productService.GetProductByCategoryRankAndCeilingPrice((int)recommendedRank, recommendedPrice);
+            var products = await productService.GetProductsByCategoryRankAndCeilingPrice((int)recommendedRank, recommendedPrice);
 
             return new OkObjectResult(new { status = "OK", content = products});
             

@@ -26,5 +26,21 @@ namespace Recommendation_Service.Data.Repositories
         {
             return dbContext.Category.ToList();
         }
+
+        public Category GetCategoryById(int categoryId)
+        {
+            return dbContext.Category.FirstOrDefault(c => c.Id == categoryId);
+        }
+
+        public void UpdateCategory(Category category)
+        {
+            dbContext.Category.Update(category);
+            dbContext.SaveChangesAsync();
+        }
+        public void DeleteCategory(Category category)
+        {
+            dbContext.Category.Remove(category);
+            dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace Recommendation_Service.Data
     public class ProductService : IProductService
     {
         private readonly string Uri = "http://product-service.com/products";
-        public async Task<List<ProductDto>> GetProductByCategoryRankAndCeilingPrice(int categoryRank, double productCeilingPrice)
+        public async Task<List<ProductDto>> GetProductsByCategoryRankAndCeilingPrice(int categoryRank, double productCeilingPrice)
         {
             using (var client = new HttpClient())
             {

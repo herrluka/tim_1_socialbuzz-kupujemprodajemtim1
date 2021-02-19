@@ -10,5 +10,8 @@ namespace Recommendation_Service.Data.Interfaces
     {
         void CreateNewCategory(Category category);
         List<Category> GetAllCategories();
+        Category GetCategoryById(int categoryId);
+        void UpdateCategory(Category category);
+        void DeleteCategory(Category category);
     }
 }

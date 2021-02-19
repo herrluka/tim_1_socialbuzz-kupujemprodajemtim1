@@ -20,30 +20,31 @@ namespace Recommendation_Service.Utils
                 return null;
             }
 
-            var totalPoints = CalculateCategoryPoints(category.CategoryRank) + CalculatePricePoints(price);
             var maxRank = categories.Max(c => c.CategoryRank);
+            var totalPoints = CalculateCategoryPoints(category.CategoryRank, maxRank) + CalculatePricePoints(price);
             var step = MaxPoints / maxRank;
             var counter = 0;
             foreach (var c in categories)
             {
-                if (counter < totalPoints && totalPoints < 2 * step)
+                if (counter < totalPoints && totalPoints < counter + step)
                 {
                     return c.CategoryRank;
                 }
+                counter += step;
             }
 
             return maxRank;
         }
 
-        public static int CalculateCategoryPoints(int categoryRank)
+        public static int CalculateCategoryPoints(int categoryRank, int maxRank)
         {
-            if (categoryRank <= 2)
+            if (categoryRank <= maxRank * 0.2)
             {
                 return 10;
-            } else if (2 < categoryRank && categoryRank <= 4)
+            } else if (maxRank * 0.2 < categoryRank && categoryRank <= maxRank * 0.5)
             {
                 return 20;
-            } else if (5 < categoryRank && categoryRank <=6)
+            } else if (maxRank * 0.5 < categoryRank && categoryRank <= maxRank * 0.7)
             {
                 return 30;
             } else

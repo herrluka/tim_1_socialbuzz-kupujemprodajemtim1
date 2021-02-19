@@ -9,7 +9,7 @@ namespace Recommendation_Service.Data
 {
     public class FakeProductService : IProductService
     {
-        public async Task<List<ProductDto>> GetProductByCategoryRankAndCeilingPrice(int categoryRank, double productCeilingPrice)
+        public async Task<List<ProductDto>> GetProductsByCategoryRankAndCeilingPrice(int categoryRank, double productCeilingPrice)
         {
             await Task.Run(() =>
                 Thread.Sleep(500)

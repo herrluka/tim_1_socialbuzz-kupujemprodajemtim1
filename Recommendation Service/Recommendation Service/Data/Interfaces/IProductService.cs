@@ -8,6 +8,6 @@ namespace Recommendation_Service.Data
 {
     public interface IProductService
     {
-        Task<List<ProductDto>> GetProductByCategoryRankAndCeilingPrice(int categoryRank, double productCeilingPrice);
+        Task<List<ProductDto>> GetProductsByCategoryRankAndCeilingPrice(int categoryRank, double productCeilingPrice);
     }
 }
