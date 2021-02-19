@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Recommendation_Service.Data;
+using Recommendation_Service.Data.Interfaces;
 using Recommendation_Service.Models;
 using System;
 using System.Collections.Generic;
@@ -18,13 +19,13 @@ namespace Recommendation_Service.Controllers
     [Route("api")]
     public class CategoryController
     {
-        private readonly ApplicationDbContext applicationDbContext;
-        private readonly Logger logger;
+        private readonly ICategoryRepository categoryRepository;
         private readonly IHttpContextAccessor contextAccessor;
+        private readonly Logger logger;
 
-        public CategoryController(ApplicationDbContext applicationDbContext, Logger logger, IHttpContextAccessor contextAccessor)
+        public CategoryController(ICategoryRepository categoryRepository , Logger logger, IHttpContextAccessor contextAccessor)
         {
-            this.applicationDbContext = applicationDbContext;
+            this.categoryRepository = categoryRepository;
             this.logger = logger;
             this.contextAccessor = contextAccessor;
         }
@@ -63,12 +64,10 @@ namespace Recommendation_Service.Controllers
                 CategoryName = category.Name,
                 CategoryRank = category.Rank
             };
-
-            applicationDbContext.Category.Add(newCategory);
             
             try
             {
-                applicationDbContext.SaveChangesAsync();
+                categoryRepository.CreateNewCategory(newCategory);  
                 logger.Log(LogLevel.Information, contextAccessor.HttpContext.TraceIdentifier, "", String.Format("Successfully created Category record {0} in database", category.Name), null);
             }
             catch (Exception ex)

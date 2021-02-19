@@ -8,6 +8,7 @@ using Microsoft.Extensions.Primitives;
 using Recommendation_Service.Data;
 using Recommendation_Service.Utils;
 using LoggingClassLibrary;
+using Recommendation_Service.Data.Interfaces;
 
 namespace Recommendation_Service.Controllers
 {
@@ -21,13 +22,13 @@ namespace Recommendation_Service.Controllers
     public class RecommendationControler
     {
         private readonly IProductService productService;
-        private readonly ApplicationDbContext applicationDbContext;
+        private readonly ICategoryRepository categoryRepository;
         private const double recommendedPercentOfPrice = 0.05;
 
-        public RecommendationControler(IProductService productService, ApplicationDbContext applicationDbContext)
+        public RecommendationControler(IProductService productService, ICategoryRepository categoryRepository)
         {
             this.productService = productService;
-            this.applicationDbContext = applicationDbContext;
+            this.categoryRepository = categoryRepository;
         }
 
         /// <summary>
@@ -58,7 +59,8 @@ namespace Recommendation_Service.Controllers
                 return new NotFoundObjectResult(new { status = "Price greater than zero not provided", content = (string)null });
             }
 
-            var recommendedRank = Algorithm.FindRecommendedCategory(applicationDbContext, productCategoryId, productPrice);
+            var categories = categoryRepository.GetAllCategories();
+            var recommendedRank = Algorithm.FindRecommendedCategory(categories, productCategoryId, productPrice);
             var recommendedPrice = productPrice + productPrice * recommendedPercentOfPrice;
 
             if (recommendedRank == null)

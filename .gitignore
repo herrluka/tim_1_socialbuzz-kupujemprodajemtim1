@@ -12,3 +12,5 @@ ReactionsService/ReactionsService/obj/
 CommentingService/CommentingService/bin/
 CommentingService/CommentingService/obj/
 CommentingService/.vs/
+/Recommendation Service/RecommendationServiceTests/obj
+/Recommendation Service/RecommendationServiceTests/bin
