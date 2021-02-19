@@ -81,9 +81,12 @@ namespace Recommendation_Service.Controllers
 
             return new OkObjectResult(new
             {
-                status = "Successfully saved",
+                status = "Successfully created",
                 content = (string)null
-            });
+            })
+            {
+                StatusCode = StatusCodes.Status201Created
+            };
 
         }
 
@@ -146,7 +149,7 @@ namespace Recommendation_Service.Controllers
 
             return new OkObjectResult(new
             {
-                status = "Successfully saved",
+                status = "Successfully updated",
                 content = (string)null
             });
 
@@ -205,7 +208,7 @@ namespace Recommendation_Service.Controllers
 
             return new OkObjectResult(new
             {
-                status = "Successfully saved",
+                status = "Successfully deleted",
                 content = (string)null
             });
 

@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "67d875ca-f4b2-4cc1-a419-fad8852335d8",
-		"name": "URIS projekat",
+		"name": "Reccomedation service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -79,6 +79,96 @@
 					"path": [
 						"api",
 						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Category",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\": 7,\r\n    \"Name\": \"PC i racunari\",\r\n    \"Rank\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:52438/api/category/7",
+					"host": [
+						"localhost"
+					],
+					"port": "52438",
+					"path": [
+						"api",
+						"category",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Category",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "CommunicationKey",
+						"type": "text",
+						"value": "Super super tezak kljuc"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\": 7,\r\n    \"Name\": \"PC i racunari\",\r\n    \"Rank\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:52438/api/category/11",
+					"host": [
+						"localhost"
+					],
+					"port": "52438",
+					"path": [
+						"api",
+						"category",
+						"11"
 					]
 				}
 			},

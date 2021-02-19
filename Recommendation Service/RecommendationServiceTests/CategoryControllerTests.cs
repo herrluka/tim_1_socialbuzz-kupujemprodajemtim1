@@ -57,7 +57,7 @@ namespace RecommendationServiceTests
         }
 
         [Test]
-        public void CreateNewCategory_HappyScenario_OK()
+        public void CreateNewCategory_HappyScenario_Created()
         {
             var categoryDTO = new CategoryDto()
             {
@@ -71,7 +71,7 @@ namespace RecommendationServiceTests
                                     .GetType()
                                     .GetProperty("StatusCode")
                                     .GetValue(response, null);
-            Assert.AreEqual(statusCode, HttpStatusCode.OK);
+            Assert.AreEqual(statusCode, HttpStatusCode.Created);
         }
 
         [Test]

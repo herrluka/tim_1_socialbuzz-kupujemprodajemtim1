@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Http;
 using Recommendation_Service.Models;
 using Recommendation_Service.Data.Fakes;
 using Microsoft.Extensions.Logging;
+using Recommendation_Service.Data.Interfaces;
+using Recommendation_Service.Data.Repositories;
 
 namespace Recommendation_Service
 {
@@ -41,6 +43,7 @@ namespace Recommendation_Service
             services.AddScoped<IProductService, FakeProductService>();
             services.AddSingleton<Logger, FakeLoggerService>();
             services.AddSingleton<ILogger, FakeLoggerService>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("ConnectionStr"))
             {
