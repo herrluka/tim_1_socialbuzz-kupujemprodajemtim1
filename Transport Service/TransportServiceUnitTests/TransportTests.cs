@@ -110,12 +110,28 @@ namespace TransportServiceUnitTests
         }
 
         [Test]
+        public void CreateNewTransport_MinimalWeightOfNewRecordIsGreaterThanMaximalWeight_BadRequest()
+        {
+            TransportBodyDto transportBody = new TransportBodyDto
+            {
+                MinimalWeight = 3000,
+                MaximalWeight = 3005,
+                Price = 2,
+                TransportTypeId = 1
+            };
+
+            var response = (BadRequestObjectResult)transportController.CreateNewTransport(transportBody);
+            var body = JsonConvert.DeserializeObject<ResponseObject>(JsonConvert.SerializeObject(response.Value));
+            Assert.AreEqual(body.Status, "Minimal weight of new record must be the same as biggest maximum valule");
+        }
+
+        [Test]
         public void CreateNewTransport_HappyScenario_OK()
         {
             TransportBodyDto transportBody = new TransportBodyDto
             {
-                MinimalWeight = 5000,
-                MaximalWeight = 5500,
+                MinimalWeight = 2001,
+                MaximalWeight = 3000,
                 Price = 20,
                 TransportTypeId = 1
             };

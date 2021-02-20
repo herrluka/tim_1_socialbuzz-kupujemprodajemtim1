@@ -81,6 +81,13 @@ namespace Transport_Service.Controllers
                 return new BadRequestObjectResult(new { status = "Maximal weight you are trying to set is part of existing range", content = (string)null });
             }
 
+            double maxWeight = allTransports.Max(t => t.MaximalWeight);
+            var greaterRangeExists = allTransports.FirstOrDefault(t => t.MaximalWeight >= bodyTransport.MaximalWeight) == null ? false : true;
+            if (!greaterRangeExists && bodyTransport.MinimalWeight != maxWeight + 1)
+            {
+                return new BadRequestObjectResult(new { status = "Minimal weight of new record must be the same as biggest maximum valule", content = (string)null });
+            }
+
             var newTransport = new Transport()
             {
                 MaximalWeight = bodyTransport.MaximalWeight,
