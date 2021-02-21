@@ -11,16 +11,18 @@ namespace Recommendation_Service.Data
 {
     public class ProductService : IProductService
     {
-        private readonly string Uri = "http://product-service.com/products";
+        private readonly string BaseUri = Environment.GetEnvironmentVariable("PRODUCT_SERVICE_BASE_URL");
+        private readonly string EndpointUri = "products/";
+
         public async Task<List<ProductDto>> GetProductsByCategoryRankAndCeilingPrice(int categoryRank, double productCeilingPrice)
         {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("Token", Environment.GetEnvironmentVariable("PRODUCT_SERVICE_SECRET_KEY"));
 
-                UriBuilder builder = new UriBuilder(Uri);
+                UriBuilder builder = new UriBuilder(BaseUri + EndpointUri);
                 builder.Query = "categoryRank=" + categoryRank + "&price=" + productCeilingPrice;
-                var data = await client.GetStringAsync(Uri);
+                var data = await client.GetStringAsync(builder.Uri);
                 var products = JsonSerializer.Deserialize<List<ProductDto>>(data);
                 return products;
             }

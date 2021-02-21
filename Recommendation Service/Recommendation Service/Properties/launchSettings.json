@@ -14,11 +14,10 @@
       "launchBrowser": true,
       "launchUrl": "api/recommended-products",
       "environmentVariables": {
-        "API_SECRET_KEY": "secretAPIkey2021",
+        "PRODUCT_SERVICE_BASE_URL": "https://product-service.com/",
         "PRODUCT_SERVICE_SECRET_KEY": "Super super tezak kljuc",
         "DB_USERNAME": "it9g2017",
         "DB_PASSWORD": "ftnftn2017",
-        "LOGGER_SERVICE_SECRET_KEY": "Super super tezak kljuc",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
