@@ -26,9 +26,9 @@ namespace Transport_Service.Data
             return dbContext.Transports.Where(t => t.TransportTypeId == transportTypeId).ToList();
         }
 
-        public void CreateNewTransport(Transport newTransport)
+        public void CreateNewTransport(Transport transport)
         {
-            dbContext.Transports.Add(newTransport);
+            dbContext.Transports.Add(transport);
         }
 
         public List<Transport> GetTransportsByTransportTypeOrderByMinimalWeight(int transportTypeId)

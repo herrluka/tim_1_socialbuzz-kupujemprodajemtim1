@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Recommendation_Service.Utils
 {
-    public class Algorithm
+    public static class Algorithm
     {
         
         private static readonly int MaxPoints = 250;

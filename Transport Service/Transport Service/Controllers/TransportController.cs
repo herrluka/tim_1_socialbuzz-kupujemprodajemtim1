@@ -82,8 +82,8 @@ namespace Transport_Service.Controllers
             }
 
             double maxWeight = allTransports.Max(t => t.MaximalWeight);
-            var greaterRangeExists = allTransports.FirstOrDefault(t => t.MaximalWeight >= bodyTransport.MaximalWeight) == null ? false : true;
-            if (!greaterRangeExists && bodyTransport.MinimalWeight != maxWeight + 1)
+            var greaterRanges = allTransports.FirstOrDefault(t => t.MaximalWeight >= bodyTransport.MaximalWeight);
+            if (greaterRanges == null && bodyTransport.MinimalWeight != maxWeight + 1)
             {
                 return new BadRequestObjectResult(new { status = "Minimal weight of new record must be the same as biggest maximum valule", content = (string)null });
             }
