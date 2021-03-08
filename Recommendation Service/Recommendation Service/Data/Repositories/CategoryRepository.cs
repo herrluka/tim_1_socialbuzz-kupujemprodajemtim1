@@ -27,6 +27,11 @@ namespace Recommendation_Service.Data.Repositories
             return dbContext.Category.ToList();
         }
 
+        public List<Category> GetAllCategoriesOrderByRank()
+        {
+            return dbContext.Category.OrderBy(c => c.CategoryRank).ToList();
+        }
+
         public Category GetCategoryById(int categoryId)
         {
             return dbContext.Category.FirstOrDefault(c => c.Id == categoryId);

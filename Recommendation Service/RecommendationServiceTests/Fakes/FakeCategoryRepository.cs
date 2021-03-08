@@ -42,6 +42,37 @@ namespace RecommendationServiceTests.Fakes
             };
         }
 
+        public List<Category> GetAllCategoriesOrderByRank()
+        {
+            return new List<Category>
+            {
+                new Category()
+                {
+                    Id = 3,
+                    CategoryName = "Knjige",
+                    CategoryRank = 2
+                },
+                new Category()
+                {
+                    Id = 1,
+                    CategoryName = "Mobilni telefoni",
+                    CategoryRank = 3
+                },
+                new Category()
+                {
+                    Id = 2,
+                    CategoryName = "Laptopovi i racunari",
+                    CategoryRank = 3
+                },
+                new Category()
+                {
+                    Id = 4,
+                    CategoryName = "Automobili",
+                    CategoryRank = 5
+                },
+            };
+        }
+
         public void CreateNewCategory(Category category)
         {
             var allCategories = GetAllCategories();

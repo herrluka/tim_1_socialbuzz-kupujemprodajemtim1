@@ -37,7 +37,6 @@ namespace Recommendation_Service.Controllers
         /// <remarks>
         /// POST 'http://localhost:52438/api/category/'
         ///     --header 'CommunicationKey: Super super tezak kljuc' \
-        ///     --header 'Content-Type: application/x-www-form-urlencoded' \
         ///     --data-urlencode 'Id=11' \
         ///     --data-urlencode 'Name=Dronovi' \
         ///     --data-urlencode 'Rank=3' \
@@ -97,7 +96,6 @@ namespace Recommendation_Service.Controllers
         /// <remarks>
         /// PUT 'http://localhost:52438/api/category/'
         ///     --header 'CommunicationKey: Super super tezak kljuc' \
-        ///     --header 'Content-Type: application/x-www-form-urlencoded' \
         ///     --data-urlencode 'Id=7' \
         ///     --data-urlencode 'Name=Racunari i laptopovi' \
         ///     --data-urlencode 'Rank=4' \
@@ -162,7 +160,6 @@ namespace Recommendation_Service.Controllers
         /// <remarks>
         /// DELETE 'http://localhost:52438/api/category/'
         ///     --header 'CommunicationKey: Super super tezak kljuc' \
-        ///     --header 'Content-Type: application/x-www-form-urlencoded' \
         ///     --data-urlencode 'Id=7' \
         /// </remarks>
         /// <response code="200">Record successfully deleted</response>

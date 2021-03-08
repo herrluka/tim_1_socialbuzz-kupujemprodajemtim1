@@ -59,7 +59,7 @@ namespace Recommendation_Service.Controllers
                 return new NotFoundObjectResult(new { status = "Price greater than zero not provided", content = (string)null });
             }
 
-            var categories = categoryRepository.GetAllCategories();
+            var categories = categoryRepository.GetAllCategoriesOrderByRank();
             var recommendedRank = Algorithm.FindRecommendedCategory(categories, productCategoryId, productPrice);
             var recommendedPrice = productPrice + productPrice * recommendedPercentOfPrice;
 
