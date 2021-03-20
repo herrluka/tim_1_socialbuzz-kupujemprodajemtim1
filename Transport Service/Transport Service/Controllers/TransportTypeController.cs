@@ -61,7 +61,6 @@ namespace Transport_Service.Controllers
         [SwaggerOperation(summary: "Create transport type", description: "Endpoint used by admin for creation of new transport type")]
         [SwaggerResponse(201, "Successfully created")]
         [SwaggerResponse(400, "Saving in database unsuccessful")]
-        [SwaggerResponse(415, "Bad body provided")]
         [SwaggerResponse(500, "Unexpected error")]
         [HttpPost("type")]
         public IActionResult CreateNewTransportType([FromBody] TransportTypeDto bodyTransportType)

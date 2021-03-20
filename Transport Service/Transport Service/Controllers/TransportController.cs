@@ -54,7 +54,6 @@ namespace Transport_Service.Controllers
         [SwaggerOperation(summary: "Create new transport", description: "Endpoint used for creation of new transport. Transport is sent as body")]
         [SwaggerResponse(201, "Successfully created")]
         [SwaggerResponse(400, "Bad transport type id sent")]
-        [SwaggerResponse(415, "Bad request body sent")]
         [SwaggerResponse(500, "Unexpected error")]
         [HttpPost]
         public IActionResult CreateNewTransport([FromBody] TransportBodyDto bodyTransport)
@@ -115,7 +114,6 @@ namespace Transport_Service.Controllers
         [SwaggerOperation(summary: "Updates existing transport", description: "Endpoint used for updating of existing transport. There is applied advanced algorithm for coordianation of weight ranges")]
         [SwaggerResponse(200, "Successfully updated")]
         [SwaggerResponse(400, "Bad transport id provided")]
-        [SwaggerResponse(415, "Bad request body sent")]
         [SwaggerResponse(500, "Unexpected error")]
         [HttpPut]
         public IActionResult UpdateTransportDetails([FromQuery] int transportId, [FromBody] TransportBodyDto newTrasport)

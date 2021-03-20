@@ -44,12 +44,10 @@ namespace Recommendation_Service.Controllers
         /// <response code="201">Record successfully created</response>
         /// <response code="400">Saving in database not successful</response>
         /// <response code="401">Token not provided or bad token provided</response>
-        /// <response code="415">Bad body data sent</response>
         /// <response code="500">Unexpected error on server</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Consumes("application/json")]
         [Produces("application/json")]
@@ -104,7 +102,6 @@ namespace Recommendation_Service.Controllers
         /// <response code="400">Saving in database not successful</response>
         /// <response code="401">Token not provided or bad token provided</response>
         /// <response code="404">Existing category not found</response>
-        /// <response code="415">Bad body data sent</response>
         /// <response code="500">Unexpected error on server</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
